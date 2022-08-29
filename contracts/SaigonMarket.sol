@@ -83,7 +83,7 @@ contract SaigonMarket is ERC721URIStorage, Ownable {
         idToMarketItem[tokenId].owner = payable(address(this));
         _itemsSold.decrement();
         
-        _transfer(msg.send, address(this), tokenId);
+        _transfer(msg.sender, address(this), tokenId);
     }
     
     /** Create the sale of a marketplace item.
@@ -103,12 +103,69 @@ contract SaigonMarket is ERC721URIStorage, Ownable {
     }
     
     /** Returns all unsold market items */
-    function fetchMarketItems() public view returns (MarketItem[] memory) {}
+    function fetchMarketItems() public view returns (MarketItem[] memory) {
+        uint itemCount = _tokenIds.current();
+        uint unsoldItemCount = _tokenIds.current() - _itemsSold.current();
+        uint currentIndex = 0;
+        
+        MarketItem[] memory items = new MarketItem[](unsoldItemCount);
+        for(uint i = 0; i < itemCount; i++) {
+            if (idToMarketItem[i + 1].owner == address(this)) {
+                uint currentId = i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId];
+                items[currentId] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
+    }
     
     /** Returns only the items that the user has purchased */
-    function fetchMyNFTs() public view returns (MarketItem[] memory) {}
+    function fetchMyNFTs() public view returns (MarketItem[] memory) {
+        uint totalItemCount = _tokenIds.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
+        
+        for (uint i = 0; i < totalItemCount; i++) {
+            if (idToMarketItem[i + 1].owner == msg.sender) {
+                itemCount += 1;
+            }
+        }
+        
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        for (uint i = 0; i < totalItemCount; i++) {
+            if (idToMarketItem[i + 1].owner == msg.sender) {
+                uint currentId = i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;            
+            }
+        }
+        return items;
+    }
     
     /** Returns only item a user has listed */
-    function fetchItemsListed() public view returns (MarketItem[] memory) {}
+    function fetchItemsListed() public view returns (MarketItem[] memory) {
+        uint totalItemCount = _tokenIds.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
+        
+        for (uint i = 0; i < totalItemCount; i++) {
+            if (idToMarketItem[i + 1].seller == msg.sender) {
+                itemCount += 1;
+            }
+        }
+        
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        for (uint i = 0; i < totalItemCount; i++) {
+            if (idToMarketItem[i + 1].seller == msg.sender) {
+                uint currentId = i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
+    }
     
 }
