@@ -1,6 +1,6 @@
 # CHỢ SÀI GÒN
 
-### Tech stack:
+### 🧩 Tech stack:
 - Next.js
 - Hardhat 
 - Ethers.js
@@ -10,10 +10,10 @@
 - RainbowKit
 - Tailwindcss
 
-Tested with:
+🧪 Tested with:
 - Slither
 - Echidna
 
-### Design Documentation
+### 🗺️ Design Documentation
 
 https://github.com/UsuaOSilver/saigon-marketplace/blob/main/assets/CSG%20_Design%20Doc_0.pdf
