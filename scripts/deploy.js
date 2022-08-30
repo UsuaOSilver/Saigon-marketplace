@@ -1,5 +1,5 @@
 const hre = require("hardhat");
-const fs = reuire('fs');
+const fs = require('fs');
 
 async function main() {
   const SaigonMarket = await hre.ethers.getContractFactory("SaigonMarket");
