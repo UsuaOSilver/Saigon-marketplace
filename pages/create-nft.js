@@ -15,7 +15,22 @@ export default function CreateIitem() {
     const [formInput, updateFormInput] = useState({ price: '', name: '', description: ''})
     const router = useRouter()
     
-    async function onChange(e){}
+    async function onChange(e){
+        /** Upload image to IPFS */
+        const file = e.target.files[0]
+        try {
+            const added = await client.add(
+                file,
+                {
+                    progress: (prog) => console.log(`received: ${prog}`)
+                }
+            )
+            const url = `https://ipfs.infura.io/ipfs/${added.path}`
+            setFileUrl(url)
+        } catch (error) {
+            console.log('Error uploading file: ', error)
+        }
+    }
     
     async function uploadToIPFS() {}
     
