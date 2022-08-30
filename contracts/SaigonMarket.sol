@@ -5,11 +5,10 @@ pragma solidity 0.8.7;
 import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract SaigonMarket is ERC721URIStorage, Ownable {
+contract SaigonMarket is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     Counters.Counter private _itemsSold;
@@ -40,7 +39,8 @@ contract SaigonMarket is ERC721URIStorage, Ownable {
     }
     
     /** Updates the listing price of the contract */
-    function updateListingPrice(uint _listingPrice) public payable onlyOwner {
+    function updateListingPrice(uint _listingPrice) public payable {
+        require(owner == msg.sender, "Only marketplace owner can update listing price.");
         listingPrice = _listingPrice;
     }
     
