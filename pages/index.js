@@ -40,7 +40,20 @@ export default function Home() {
    setNfts(items)
    setLoadingState('loaded')
   }
-  async function buyNft(nft) {}
+  async function buyNft(nft) {
+    /** Needs the user to sign the transaction, so will use Web3Provider and sign it */
+    const web3Modal = new Web3Modal()
+    const connection = await web3Modal.connect()
+    const provider = new ethers.providers.Web3Provider(connection)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
+    
+    /** User will be promted to pay the asking process to complete the transaction */
+    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
+    const transaction = await contract.createMarketSale(nft.tokenId, { value: price })
+    await transaction.wait()
+    loadNFTs()
+  }
   if (loadingState === 'loaded' && !nfts.length) return (<h1 className='px-20 py-10 text-3xl'>No items in marketplace</h1>)
   return (
     <div className='flex justify-center'>
