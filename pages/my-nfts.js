@@ -23,7 +23,7 @@ export default function MyAssets() {
             cacheProvider: true,
         })
         const connection = await web3Modal.connect()
-        const provider = await ethers.providers.Web3Provider(connection)
+        const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
             
         const marketplaceContract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)

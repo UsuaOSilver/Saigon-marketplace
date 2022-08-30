@@ -18,12 +18,12 @@ export default function CreatorDashboard() {
             network: 'mainnet',
             cacheProvider: true,
         })
-        const connection = await Web3Modal.connect()
+        const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
         
         const contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
-        const data = await contract.fetchItemListed()
+        const data = await contract.fetchItemsListed()
         
         const items = await Promise.all(data.map(async i => {
             const tokenUri = await contract.tokenURI(i.tokenId)
