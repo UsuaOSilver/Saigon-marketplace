@@ -5,8 +5,14 @@
 - Hardhat 
 - Ethers.js
 - IPFS
+- theGraph
 - Chainlink Oracle
+- RainbowKit
 - Tailwindcss
+
+Tested with:
+- Slither
+- Echidna
 
 ### Design Documentation
 
