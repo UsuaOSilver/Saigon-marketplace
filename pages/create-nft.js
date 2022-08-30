@@ -32,7 +32,20 @@ export default function CreateIitem() {
         }
     }
     
-    async function uploadToIPFS() {}
+    async function uploadToIPFS() {
+        const { name, description, price } = formInput
+        if (!name || !description || !price || !fileUrl) return
+        /** First, upload metadata to IPFS */
+        const data = JSON.stringify({ name, description, image: fileUrl })
+        try {
+            const added = await client.add(data)
+            const url = `https://ipfs.infura.io/ipfs/${added.path}`
+            /** after metadata is uploaded to IPFS, return the URL to use it in the transaction */
+            return url
+        } catch (error) {
+            console.log('Error uploading file: ', error)
+        }
+    }
     
     async function listNFTForSale() {}
     
