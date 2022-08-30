@@ -9,6 +9,5 @@
 - Tailwindcss
 
 ### Design Documentation
-https://lucid.app/join
 
-Join ID: 74Z KTC
+[Uploading CSG.pdf…]()
