@@ -9,16 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.10",
     "@nomiclabs/hardhat-ethers": "^2.1.1",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@openzeppelin/contracts": "^4.7.3",
     "axios": "^0.27.2",
     "chai": "^4.3.6",
+    "connectkit": "^0.0.2",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.0",
     "hardhat": "^2.10.2",
     "ipfs-http-client": "^57.0.3",
     "next": "12.2.5",
+    "next-themes": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "source-map-support": "^0.5.21",
@@ -27,6 +30,7 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
+    "@types/react": "^18.0.18",
     "autoprefixer": "^10.4.8",
     "eslint": "8.23.0",
     "eslint-config-next": "12.2.5",
