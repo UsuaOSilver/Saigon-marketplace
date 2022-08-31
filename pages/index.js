@@ -2,6 +2,9 @@ import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
+import ConnectWallet from '@/components/ConnectWallet'
+import ThemeSwitcher from '@/components/ThemeSwitcher'
+
 
 import { marketplaceAddress } from '../config'
 
