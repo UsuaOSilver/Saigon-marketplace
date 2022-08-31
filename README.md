@@ -1,13 +1,16 @@
 # 🕰️ CHỢ SÀI GÒN 🕰️
 
 ### 🧩 Tech stack:
-- Next.js
+- JavaScript
+- Typescript
 - Hardhat 
+- Next.js
 - Ethers.js
 - Alchemy
 - IPFS
 - theGraph
 - Chainlink Oracle
+- [DApp Starter](https://github.com/m1guelpf/dapp-starter)
 - wagmi.sh
 - Tailwindcss
 
