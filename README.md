@@ -4,10 +4,11 @@
 - Next.js
 - Hardhat 
 - Ethers.js
+- Alchemy
 - IPFS
 - theGraph
 - Chainlink Oracle
-- RainbowKit
+- wagmi.sh
 - Tailwindcss
 
 🧪 Tested with:
