@@ -5,7 +5,6 @@ import Web3Modal from 'web3modal'
 import ConnectWallet from '@/components/ConnectWallet'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
 
-
 import { marketplaceAddress } from '../config'
 
 import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'

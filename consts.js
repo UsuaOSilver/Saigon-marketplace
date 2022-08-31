@@ -1,0 +1,1 @@
+export const APP_NAME = 'Cho Sai Gon'
