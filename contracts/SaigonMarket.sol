@@ -49,7 +49,7 @@ contract SaigonMarket is ERC721URIStorage {
         return listingPrice;
     }
     
-    /** Mint a token and lists it in the marketplace */
+    /** Mint a token and list it in the marketplace */
     function createToken(string memory tokenURI, uint256 price) public payable returns (uint) {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
