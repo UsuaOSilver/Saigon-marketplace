@@ -19,4 +19,4 @@
 - Echidna
 
 ### 🗺️ Design Documentation
-[CSG_DesignDoc.pdf](https://github.com/UsuaOSilver/saigon-marketplace/blob/main/assets/CSG%20_Design%20Doc_0.pdf)
+[CSG_DesignDoc](https://github.com/UsuaOSilver/Saigon-marketplace/blob/main/designDoc.md)
