@@ -5,7 +5,7 @@ import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 /** 1. Compatible with ERC-721 standard */
-contract FstNFT is ERC721Enumerable, Ownable {
+contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     
     Counters.Counter private _nftIds;
