@@ -9795,6 +9795,11 @@
     "semver" "^5.5.0"
     "tmp" "0.0.33"
 
+"solmate@^6.6.1":
+  "integrity" "sha512-WHvRXQvGtgR6R9nmkDTz/d+oULMqf/D33rlzQyadTX2SbuTmaW7ToEjGjGtWUVCQwZsZ/JP3vbOEVv7fB50btg=="
+  "resolved" "https://registry.npmjs.org/solmate/-/solmate-6.6.1.tgz"
+  "version" "6.6.1"
+
 "source-map-js@^1.0.2":
   "integrity" "sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw=="
   "resolved" "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
