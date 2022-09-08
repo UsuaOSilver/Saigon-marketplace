@@ -8,23 +8,40 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
+import "../contracts/SolmateNFTFactory.sol";
+
+/// @title Contract of the SaiGon Martketplace
 contract SaigonMarket is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     Counters.Counter private _itemsSold;
+    
+    /***********************/
+    /*** State Variables ***/
+    /***********************/
     
     uint256 public listingPrice = 0.25 ether;
     address payable public owner;
     
     mapping(uint256 => MarketItem) private idToMarketItem;
     
+    /// @custom: add English auction: startTime, secondsUntilEndTime, currencyToAccept
+    /// @custom: English and GDA in the AuctionHouse contract instead of separated
+    /// @custom: add ERC1155 support: quantityToList, reservePricePerToken, buyoutPricePerToken
+    /// @custom: add ListingType: directListing, EnglishAuction, GDA
     struct MarketItem {
-        uint256 tokenId;
+        address assetContract;
         address payable seller;
         address payable owner;
+        uint256 tokenId;
         uint256 price;
         bool sold;
     }
+    
+    
+    /**************/
+    /*** Events ***/
+    /**************/
     
     event MarketitemCreated(
         uint256 indexed tokenId,
@@ -38,18 +55,27 @@ contract SaigonMarket is ERC721URIStorage {
         owner = payable(msg.sender);
     }
     
-    /** Updates the listing price of the contract */
+    /// @notice Returns the listing price of the contract 
+    /// @return Listing price in ether
+    function getListingPrice() public view returns (uint256) {
+        return listingPrice;
+    }
+    
+    
+    /************************/
+    /*** User Functions ***/
+    /************************/
+    
+    /// @notice Updates the listing price of the contract 
+    /// @param
     function updateListingPrice(uint _listingPrice) public payable {
         require(owner == msg.sender, "Only marketplace owner can update listing price.");
         listingPrice = _listingPrice;
     }
     
-    /** Returns the listing price of the contract */
-    function getListingPrice() public view returns (uint256) {
-        return listingPrice;
-    }
-    
-    /** Mint a token and list it in the marketplace */
+    /// @notice Mint a token and list it in the marketplace 
+    /// @param
+    /// @param
     function createToken(string memory tokenURI, uint256 price) public payable returns (uint) {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
@@ -60,6 +86,9 @@ contract SaigonMarket is ERC721URIStorage {
         return newTokenId;
     }
     
+    /// @notice
+    /// @param
+    /// @param
     function createMarketItem(uint256 tokenId, uint256 price) private {
         require(price > 0, "Price must be at leat 1 wei");
         require(msg.value == listingPrice, "Price must be equal to listing price");
@@ -73,7 +102,9 @@ contract SaigonMarket is ERC721URIStorage {
         );
     }
     
-    /** Allow someone to resell a token they have purchased */
+    /// @notice Allow someone to resell a token they have purchased 
+    /// @param
+    /// @param
     function resellToken(uint256 tokenId, uint256 price) public payable {
         require(idToMarketItem[tokenId].owner == msg.sender, "Only item owner can perform this operation");
         require(msg.value == listingPrice, "Price must be equal to listing price");
@@ -86,9 +117,9 @@ contract SaigonMarket is ERC721URIStorage {
         _transfer(msg.sender, address(this), tokenId);
     }
     
-    /** Create the sale of a marketplace item.
-      * Trasnfer ownership of the item, as well as funds between parties 
-      */
+    /// @notice Create the sale of a marketplace item. 
+    /// @dev Trasnfer ownership of the item, as well as funds between parties 
+    /// @param tokenId  The Id of the NFT 
     function createMarketSale(uint256 tokenId) public payable {
         uint price = idToMarketItem[tokenId].price;
         address seller = idToMarketItem[tokenId].seller;
@@ -102,7 +133,13 @@ contract SaigonMarket is ERC721URIStorage {
         payable(seller).transfer(msg.value);
     }
     
-    /** Returns all unsold market items */
+    
+    /**********************/
+    /*** View Functions ***/
+    /**********************/
+    
+    /// @notice Returns all unsold market items 
+    /// @return
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint itemCount = _tokenIds.current();
         uint unsoldItemCount = _tokenIds.current() - _itemsSold.current();
@@ -120,7 +157,8 @@ contract SaigonMarket is ERC721URIStorage {
         return items;
     }
     
-    /** Returns only the items that the user has purchased */
+    /// @notice Returns only the items that the user has purchased 
+    /// @return
     function fetchMyNFTs() public view returns (MarketItem[] memory) {
         uint totalItemCount = _tokenIds.current();
         uint itemCount = 0;
@@ -144,7 +182,8 @@ contract SaigonMarket is ERC721URIStorage {
         return items;
     }
     
-    /** Returns only item a user has listed */
+    /// @notice Returns only item a user has listed 
+    /// @return
     function fetchItemsListed() public view returns (MarketItem[] memory) {
         uint totalItemCount = _tokenIds.current();
         uint itemCount = 0;
