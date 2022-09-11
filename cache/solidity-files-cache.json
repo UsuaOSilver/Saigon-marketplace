@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\contracts\\SaigonMarket.sol": {
-      "lastModificationDate": 1661818280698,
-      "contentHash": "d6ac6465c8b0dd04ca2e4c93e0571b18",
+      "lastModificationDate": 1662685014670,
+      "contentHash": "68083c1eef232e95fcae312fcac8a014",
       "sourceName": "contracts/SaigonMarket.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -31,8 +31,8 @@
       "imports": [
         "hardhat/console.sol",
         "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol"
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "../contracts/NftFactory.sol"
       ],
       "versionPragmas": [
         "0.8.7"
@@ -42,7 +42,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\hardhat\\console.sol": {
-      "lastModificationDate": 1661642448144,
+      "lastModificationDate": 1661924233877,
       "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
@@ -77,7 +77,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
-      "lastModificationDate": 1661642444371,
+      "lastModificationDate": 1660942696423,
       "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
       "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
       "solcConfig": {
@@ -112,7 +112,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\ERC721URIStorage.sol": {
-      "lastModificationDate": 1661642445185,
+      "lastModificationDate": 1660942696785,
       "contentHash": "8af32effd0536e2971ff8496812a5016",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
       "solcConfig": {
@@ -149,7 +149,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\ERC721.sol": {
-      "lastModificationDate": 1661642445110,
+      "lastModificationDate": 1660942696726,
       "contentHash": "79ff1a7eb801a525aa315fb7a679eede",
       "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
       "solcConfig": {
@@ -192,7 +192,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721.sol": {
-      "lastModificationDate": 1661642445747,
+      "lastModificationDate": 1660942697145,
       "contentHash": "ec99d946db3685a3630554aa6055bd7f",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
       "solcConfig": {
@@ -229,7 +229,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721Receiver.sol": {
-      "lastModificationDate": 1661642445792,
+      "lastModificationDate": 1660942697166,
       "contentHash": "c22d4395e33763de693fd440c6fd10e1",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
       "solcConfig": {
@@ -264,7 +264,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\IERC721Metadata.sol": {
-      "lastModificationDate": 1661642445778,
+      "lastModificationDate": 1660942697157,
       "contentHash": "efbc0d15b80a74e34dbe8da0f3e879bb",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
       "solcConfig": {
@@ -301,7 +301,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Address.sol": {
-      "lastModificationDate": 1661642444219,
+      "lastModificationDate": 1660942696361,
       "contentHash": "c476b3895a94798b88a4bb97399e6dfe",
       "sourceName": "@openzeppelin/contracts/utils/Address.sol",
       "solcConfig": {
@@ -336,7 +336,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1661642444354,
+      "lastModificationDate": 1660942696418,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -371,7 +371,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Strings.sol": {
-      "lastModificationDate": 1661642446278,
+      "lastModificationDate": 1660942697304,
       "contentHash": "cf46906c4035f51639a22265066a9e78",
       "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
@@ -406,7 +406,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
-      "lastModificationDate": 1661642444864,
+      "lastModificationDate": 1660942696574,
       "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
@@ -443,7 +443,7 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
-      "lastModificationDate": 1661642445597,
+      "lastModificationDate": 1660942697070,
       "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
@@ -475,6 +475,82 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\contracts\\NftFactory.sol": {
+      "lastModificationDate": 1662685080035,
+      "contentHash": "52e323bb9d757ecffe257357c880b80a",
+      "sourceName": "contracts/NftFactory.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.7"
+      ],
+      "artifacts": [
+        "NFT"
+      ]
+    },
+    "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1660942697258,
+      "contentHash": "e436cea06129be2c73cda4b1acc848b5",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
       ]
     }
   }
