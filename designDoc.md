@@ -48,7 +48,7 @@ An NFT marketplace allowing users to create their own auction houses with Variab
 
 ## WORKFLOW VISUAL:
 
-![image](https://user-images.githubusercontent.com/48362877/190514292-7021c378-72cd-410b-b77b-959dd673b357.png)
+![image](https://user-images.githubusercontent.com/48362877/190517243-f216dad0-0d01-4bca-9cba-76a5da69913e.png)
 ------
 
 ## DESIGNS
