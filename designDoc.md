@@ -1,6 +1,6 @@
 
 # Cho Saigon Market
-_5th September 2022_
+_14th September 2022_
 
 _Anh Nguyen_
 
@@ -27,24 +27,35 @@ An NFT marketplace allowing users to create their own auction houses with Variab
   - Create Auction House page: users can input the start price of the NFT, the price change rate for their collection and the number of items in the collection. A graph implementing VRGDA showing how price changes with the user inputs will be displayed to map out a clear plan of the auction perspective.  
 
 ### Smart Contracts: 
+  
+  1. NftFactory
+  - The `mint()` function allows user to mint a token and create a listing
 
-  1. SaigonMarket
 
-  - A mapping to list to keep track of every NFT listing. The “MarketItem” struct to store tokenId, seller, owner, price, and sold status.
-  - Creating a new charity with a goal, creator, token, beneficiary address, and deadline.
-  - createToken function, which carries the createMarketItem function, allows users to mint a token and list it in the marketplace
-  - resellToken function allows anyone to resell a token they have purchased. 
-  - createMarketSale function creates the sale of a marketplace item by putting the item on sale, trasnferring ownership of the item, as well as funds between parties
-  - fetchMarketItems function returns all unsold market items to display them on the landing page at the Feature section
-  - fetchMyNFTs function returns only the items that the user has purchased to display them on the My NFT page
-  - fetchItemsListed function returns only item a user has listed to display them on the Dashboard page
+  2. SaigonMarket
 
-  2. AuctionHouse 
+  - A mapping to list to keep track of every NFT listing. 
+  - The `MarketItem` struct to store tokenId, seller, owner, price, and sold status.
+  - The `createToken` function, which carries the createMarketItem function, allows users to mint a token and list it in the marketplace.
+  - The `resellToken` function allows anyone to resell a token they have purchased. 
+  - The `createMarketSale` function creates the sale of a marketplace item by putting the item on sale, trasnferring ownership of the item, as well as funds between parties.
+  - The `fetchMarketItems` function returns all unsold market items to display them on the landing page at the Feature section.
+  - The `fetchMyNFTs` function returns only the items that the user has purchased to display them on the My NFT page.
+  - The `fetchItemsListed` function returns only item a user has listed to display them on the Dashboard page.
+
+  3. AuctionHouse 
 
 ### WORKFLOW VISUAL:
 
-![image](https://user-images.githubusercontent.com/48362877/188521043-19a3c95b-b29b-4dd9-85c2-d5e9fae37de9.png)
+![image](https://user-images.githubusercontent.com/48362877/190514292-7021c378-72cd-410b-b77b-959dd673b357.png)
 
+### DESIGNS
+
+A. 
+![image](https://user-images.githubusercontent.com/48362877/190514990-9f3b2858-fe73-49b6-b970-c97c921c6a4f.png)
+
+B.
+![image](https://user-images.githubusercontent.com/48362877/190515013-ca0c9657-a0e8-441b-a62c-d2d24661c7f3.png)
 
 LINKS:
 [Variable Rate GDAs](https://www.paradigm.xyz/2022/08/vrgda)
