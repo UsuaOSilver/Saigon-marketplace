@@ -34,7 +34,7 @@ An NFT marketplace allowing users to create their own auction houses with Variab
 
   2. SaigonMarket
 
-  - A mapping to list to keep track of every NFT listing. 
+  - A mapping to keep track of every NFT listing. 
   - The `MarketItem` struct to store tokenId, seller, owner, price, and sold status.
   - The `createToken` function, which carries the createMarketItem function, allows users to mint a token and list it in the marketplace.
   - The `resellToken` function allows anyone to resell a token they have purchased. 
@@ -44,18 +44,22 @@ An NFT marketplace allowing users to create their own auction houses with Variab
   - The `fetchItemsListed` function returns only item a user has listed to display them on the Dashboard page.
 
   3. AuctionHouse 
+------
 
-### WORKFLOW VISUAL:
+## WORKFLOW VISUAL:
 
 ![image](https://user-images.githubusercontent.com/48362877/190514292-7021c378-72cd-410b-b77b-959dd673b357.png)
+------
 
-### DESIGNS
+## DESIGNS
 
 A. 
 ![image](https://user-images.githubusercontent.com/48362877/190514990-9f3b2858-fe73-49b6-b970-c97c921c6a4f.png)
 
 B.
 ![image](https://user-images.githubusercontent.com/48362877/190515013-ca0c9657-a0e8-441b-a62c-d2d24661c7f3.png)
+------
 
-LINKS:
+## LINKS:
+
 [Variable Rate GDAs](https://www.paradigm.xyz/2022/08/vrgda)
