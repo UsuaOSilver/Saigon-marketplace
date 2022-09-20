@@ -19,7 +19,7 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
         address beneficiary, // Mint user
         address minter // address(this)
     );
-    
+    event FundWithdrawn()
     
     using SafeMath for uint256;
     using Counters for Counters.Counter;
@@ -72,11 +72,16 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
         
         // Payment transferred 
         (bool success, ) = address(this).call{value: msg.value}("");
-        require(success, "Transfer failed);
+        require(success, "Transfer failed");
         
         emit Minted(newTokenId, URI, _to, _msgSender())
         
         return newTokenId;  
+    }
+    
+    function withdrawFund() onlyOwner {
+        (bool success, ) = _msgSender().call{value: address(this).balance}("");
+        require(success, "withdraw failed");
     }
 }    
     
