@@ -20,6 +20,7 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
         address minter // address(this)
     );
     
+    
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     
@@ -51,7 +52,7 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
     /// @param      _to                  The NFT buyer address
     /// @param      tokenIds             The number of NFT already minted in the collection
     /// @param      quantityPurchase     The quantity that will be minted based on the order
-    /// @return     newTokenId           the total number of NFT minted afterwards
+    /// @return     newTokenId           the total number of NFT minted afterwards to be displayed on UI
     function mint(address _to, string memory tokenIds, uint256 quantityPurchase) external payable returns (uint256) {
         uint256 remainingSupply = TOTAL_SUPPLY - _tokenIds.current();
         uint256 totalPrice = quantityPurchase * LISTING_PRICE;        
@@ -69,9 +70,13 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
             _setTokenURI(newTokenId, URI);
         }
         
+        // Payment transferred 
+        (bool success, ) = address(this).call{value: msg.value}("");
+        require(success, "Transfer failed);
+        
         emit Minted(newTokenId, URI, _to, _msgSender())
         
-        return newTokenId;
+        return newTokenId;  
     }
 }    
     
