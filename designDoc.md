@@ -38,25 +38,25 @@ An NFT marketplace allowing users to create their own auction houses with Variab
 2. SaigonMarket
     - A mapping to keep track of every NFT listing. 
     - A mapping to keep track of every NFT offer. 
-    - The `Listing` struct to store tokenId, seller, owner, price, and sold status.
-    - The `createNFT` function allows users to input NFT data to mint a token and list it in the marketplace.
-    - The `listNFT` function creates the sale of a NFT, trasnfers the NFT ownership.
-    - The `resellToken` function allows anyone to resell a token they have purchased. 
-    - The `fetchMarketItems` function returns all unsold market items to display them on the landing page at the Feature section.
-    - The `fetchMyNFTs` function returns only the items that the user has purchased to display them on the My NFT page.
-    - The `fetchItemsListed` function returns only item a user has listed to display them on the Dashboard page.
+    - The `Listing()` struct to store tokenId, seller, owner, price, and sold status.
+    - The `createNFT()` function allows users to input NFT data to mint a token and list it in the marketplace.
+    - The `listNFT()` function creates the sale of a NFT, trasnfers the NFT ownership.
+    - The `resellToken()` function allows anyone to resell a token they have purchased. 
+    - The `fetchMarketItems()` function returns all unsold market items to display them on the landing page at the Feature section.
+    - The `fetchMyNFTs()` function returns only the items that the user has purchased to display them on the My NFT page.
+    - The `fetchItemsListed()` function returns only item a user has listed to display them on the Dashboard page.
 
 3. SaigonAuctionHouse 
-    - `createAuction` function creates a new auction for a given item
-    - `placeBid` function places a new bid, out bidding the existing bidder if found and criteria is reached
-    - `withdrawBid` function allows the hightest bidder to withdraw the bid (after 12 hours post auction's end)
-    - `closeAuction` function closes a finished auction and rewards the highest bidder
-    - `cancelAuction` function cancels and inflight and un-resulted auctions, returning the funds to the top bidder if found
-    - `updateMinBidIncrement` function updates the amount by which bids have to increase, across all auctions
-    - `updateBidWithdrawalLockTime` function updates the global bid withdrawal lockout time
-    - `updateAuctionReservePrice` function updates the current reserve price for an auction
-    - `updateAuctionStartTime` function updates the current start time for an auction
-    - `updateAuctionStartTime` function updates the current end time for an auction
+    - `createAuction()` function creates a new auction for a given item
+    - `placeBid()` function places a new bid, out bidding the existing bidder if found and criteria is reached
+    - `withdrawBid()` function allows the hightest bidder to withdraw the bid (after 12 hours post auction's end)
+    - `closeAuction()` function closes a finished auction and rewards the highest bidder
+    - `cancelAuction()` function cancels and inflight and un-resulted auctions, returning the funds to the top bidder if found
+    - `updateMinBidIncrement()` function updates the amount by which bids have to increase, across all auctions
+    - `updateBidWithdrawalLockTime()` function updates the global bid withdrawal lockout time
+    - `updateAuctionReservePrice()` function updates the current reserve price for an auction
+    - `updateAuctionStartTime()` function updates the current start time for an auction
+    - `updateAuctionStartTime()` function updates the current end time for an auction
 
 ------
 
