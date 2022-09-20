@@ -4,13 +4,22 @@ pragma solidity 0.8.7;
 // Import this file to use console.log
 import "hardhat/console.sol";
 
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/introspection/IERC165.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import "../contracts/NftFactory.sol";
 
 /// @title Contract of the SaiGon Martketplace
-contract SaigonMarket {
+contract SaigonMarket is Ownable, ReentrancyGuard {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
     using Counters for Counters.Counter;
 
     Counters.Counter private _itemIds;
@@ -21,56 +30,107 @@ contract SaigonMarket {
     /*** Events ***/
     /**************/
     
-    event MarketitemCreated(
-        uint256 indexed tokenId,
-        address seller,
-        address owner,
-        uint256 price,
-        bool sold
+    event NFTCreated(address creator, address nft);
+    event NFTListed(
+        address indexed owner,
+        address indexed nft,
+        uint256 tokenId,
+        uint256 quantity,
+        uint256 pricePerItem,
+        address payToken
     );
-    
-    // event ListingSold();
-    // event OfferPlaced();
-    // event OfferClosed();
+    event ListingSold(
+        address indexed seller,
+        address indexed buyer,
+        address indexed nft,
+        uint256 tokenId,
+        uint256 quantity,
+        address payToken,
+        int256 unitPrice,
+        uint256 pricePerItem
+    );
+    event ListingUpdated(
+        address indexed owner,
+        address indexed nft,
+        uint256 tokenId,
+        address payToken,
+        uint256 newPrice
+    );
+    event ListingCanceled(
+        address indexed owner,
+        address indexed nft,
+        uint256 tokenId
+    );
+    event OfferCreated(
+        address indexed creator,
+        address indexed nft,
+        uint256 tokenId,
+        uint256 quantity,
+        address payToken,
+        uint256 pricePerItem,
+        uint256 deadline
+    );
+    event OfferCanceled(
+        address indexed creator,
+        address indexed nft,
+        uint256 tokenId
+    );
     // event Balancedwithdrawned();
     // event TransferOwnership();
+    
+    
+    /**************/
+    /*** Struct ***/
+    /**************/
+
+    /// @notice Structure for listed items    
+    struct Listing {
+        uint256 quantity;
+        uint256 pricePerItem;
+        address payToken;
+    }
+    
+    /// @notice Structure for offer
+    struct Offer {
+        IERC20 payToken;
+        uint256 quantity;
+        uint256 pricePerItem;
+        uint256 deadline;
+    }
+    
+    struct CollectionRoyalty {
+        uint16 royalty;
+        address creator;
+        address feeRecipient;
+    }
     
     
     /***********************/
     /*** State Variables ***/
     /***********************/
+    
+    bytes4 private constant INTERFACE_ID_ERC721 = 0x80ac58cd;
+    bytes4 private constant INTERFACE_ID_ERC1155 = 0xd9b67a26;
+   
     address operator;
 
-    mapping(uint256 => MarketItem) private idToMarketItem;
-    mapping(address => uint) balances;
+    /// @notice nftAddress -> tokenId -> Listing
+    mapping(address => mapping(uint256 => MarketItem)) public listings;
+    
+    /// @notice nftAddress -> tokenId -> Offer
+    mapping(address => mapping(uint256 => Offer)) public offers;
+    
+    mapping(address => bool) public exists;
+    
     
     /// @custom: add address assetContract?
     /// @custom: add English auction: startTime, secondsUntilEndTime, currencyToAccept
     /// @custom: English and GDA in the AuctionHouse contract instead of separated
     /// @custom: add ERC1155 support: quantityToList, reservePricePerToken, buyoutPricePerToken
     /// @custom: add ListingType: directListing, EnglishAuction, GDA
-    struct MarketItem {
-        address payable seller;
-        address payable owner;
-        uint256 tokenId;
-        uint256 price;
-        bool sold;
-    }
-    
     constructor (address _operator) {
         operator = _operator;
     }
-    
-    
-    /************************/
-    /*** Helper Functions ***/
-    /************************/
-    
-    /// @notice Returns the listing price of the contract 
-    /// @return Listing price in ether
-    // function getListingPrice() public view returns (uint256) {
-    //     return listingPrice;
-    // }
     
     
     /************************/
@@ -87,42 +147,73 @@ contract SaigonMarket {
     // / @notice Mint a token and list it in the marketplace 
     // / @params tokenURI
     // / @params price
-    function createToken(
-                        string memory name, 
-                        string memory symbol, 
+    function createNFT(
+                        string memory _name, 
+                        string memory _symbol, 
                         string memory tokenURI, 
                         uint256 price,
                         uint256 totalSupply,
                         uint256 maxPurchase
-                        ) public payable returns (uint) {
-        // _tokenIds.increment();
-        // uint256 newTokenId = _tokenIds.current();
+                        ) external payable returns (address) {
         
-        // _mint(msg.sender, newTokenId);
-        // _setTokenURI(newTokenId, tokenURI);
-        // createMarketItem(newTokenId, price);
+        SaigonNFT nft = new SaigonNFT(_name, _symbol, tokenURI, price, totalSupply, maxPurchase);
         
-        NFT nft = new NFT(name, symbol, tokenURI, price, totalSupply, maxPurchase);
-        
-        nft.mint(_tokenIds, numTokensPurchase);
-        // return newTokenId;
+        exists[address(nft)] = true;
+        nft.TransferOwnership(_msgSender());
+        emit NFTCreated(_msgSender(), address(nft));
+        return (address(nft));
     }
     
-    /// @notice
-    /// @params tokenId
-    /// @params price
-    // function createMarketItem(uint256 tokenId, uint256 price) private {
-    //     require(price > 0, "Price must be at leat 1 wei");
-    //     require(msg.value == listingPrice, "Price must be equal to listing price");
+    // / @notice Method for listing NFT
+    // / @params tokenId
+    // / @params price
+    function listNFT(
+        address _nftAddress,
+        uint256 _tokenId,
+        uint256 _quantity,
+        uint256 _pricePerItem,
+        address _payToken
+     ) external notListed(_nftAddress, _tokenId) {
         
-    //     idToMarketItem[tokenId] = MarketItem(
-    //         tokenId,
-    //         payable(msg.sender),
-    //         payable(address(this)),
-    //         price,
-    //         false
-    //     );
-    // }
+        if (IERC165(_nftAddress).supportsInterface(INTERFACE_ID_ERC721)) {
+            IERC721 nft = IERC721(_nftAddress);
+            require(nft.ownerOf(_tokenId) == _msgSender(), "not owning item");
+            require(
+                nft.isApprovedForAll(_msgSender(), address(this)),
+                "item not approved"
+            );
+        } else if (
+            IERC165(_nftAddress).supportsInterface(INTERFACE_ID_ERC1155)
+        ) {
+            IERC1155 nft = IERC1155(_nftAddress);
+            require(
+                nft.balanceOf(_msgSender(), _tokenId) >= _quantity,
+                "must hold enough nfts"
+            );
+            require(
+                nft.isApprovedForAll(_msgSender(), address(this)),
+                "item not approved"
+            );
+        } else {
+            revert("invalid nft address");
+        }
+        
+         _validPayToken(_payToken);
+        
+        listings[_nftAddress][_tokenId] = Listing(
+            _quantity,
+           _pricePerItem,
+            _payToken,
+        );
+        emit ItemListed(
+            _msgSender(),
+            _nftAddress,
+            _tokenId,
+            _quantity,
+           _pricePerItem,
+            _payToken,
+        );
+    }
     
     /// @notice Allow someone to resell a token they have purchased 
     /// @params tokenId
@@ -234,4 +325,68 @@ contract SaigonMarket {
     //     return items;
     // }
     
+       
+    /************************/
+    /*** Helper Functions ***/
+    /************************/
+    
+    /// @notice Returns the listing price of the contract 
+    /// @return Listing price in ether
+    // function getListingPrice() public view returns (uint256) {
+    //     return listingPrice;
+    // }
+    
+    
+    /************************/
+    /** Internal & Private **/
+    /************************/
+    
+    function _getNow() internal view virtual returns (uint256) {
+        return block.timestamp;
+    }
+
+    function _validPayToken(address _payToken) internal {
+        require(
+            _payToken == address(0) ||
+                (addressRegistry.tokenRegistry() != address(0) &&
+                    IFantomTokenRegistry(addressRegistry.tokenRegistry())
+                        .enabled(_payToken)),
+            "invalid pay token"
+        );
+    }
+
+    function _validOwner(
+        address _nftAddress,
+        uint256 _tokenId,
+        address _owner,
+        uint256 quantity
+    ) internal {
+        if (IERC165(_nftAddress).supportsInterface(INTERFACE_ID_ERC721)) {
+            IERC721 nft = IERC721(_nftAddress);
+            require(nft.ownerOf(_tokenId) == _owner, "not owning item");
+        } else if (
+            IERC165(_nftAddress).supportsInterface(INTERFACE_ID_ERC1155)
+        ) {
+            IERC1155 nft = IERC1155(_nftAddress);
+            require(
+                nft.balanceOf(_owner, _tokenId) >= quantity,
+                "not owning item"
+            );
+        } else {
+            revert("invalid nft address");
+        }
+    }
+
+    function _cancelListing(
+        address _nftAddress,
+        uint256 _tokenId,
+        address _owner
+    ) private {
+        Listing memory listedItem = listings[_nftAddress][_tokenId][_owner];
+
+        _validOwner(_nftAddress, _tokenId, _owner, listedItem.quantity);
+
+        delete (listings[_nftAddress][_tokenId][_owner]);
+        emit ItemCanceled(_owner, _nftAddress, _tokenId);
+    }
 }
