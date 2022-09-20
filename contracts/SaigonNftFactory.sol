@@ -6,6 +6,10 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
+error NftFctr__MaxQuantityExceeded();
+error NftFctr__MaxSupplyReached();
+error NftFctr__NotEnoughFundSent();
+
 /** 1. Compatible with ERC-721 standard */
 contract SaigonNFT is ERC721URIStorage, Ownable {
     
@@ -43,6 +47,11 @@ contract SaigonNFT is ERC721URIStorage, Ownable {
         MAX_PURCHASE = _maxPurchase;
     }
     
+    /// @notice                          Mints the amount of tokens requested by the buyer
+    /// @param      _to                  The NFT buyer address
+    /// @param      tokenIds             The number of NFT already minted in the collection
+    /// @param      quantityPurchase     The quantity that will be minted based on the order
+    /// @return     newTokenId           the total number of NFT minted afterwards
     function mint(address _to, string memory tokenIds, uint256 quantityPurchase) external payable returns (uint256) {
         uint256 remainingSupply = TOTAL_SUPPLY - _tokenIds.current();
         uint256 totalPrice = quantityPurchase * LISTING_PRICE;        

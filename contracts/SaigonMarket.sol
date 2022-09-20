@@ -16,6 +16,8 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import "../contracts/NftFactory.sol";
 
+error NotApprovedForMarketplace();
+
 /// @title Contract of the SaiGon Martketplace
 contract SaigonMarket is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
@@ -51,8 +53,8 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
     );
     event ListingUpdated(
         address indexed owner,
-        address indexed nft,
-        uint256 tokenId,
+        address[] nft,
+        uint256[] tokenId,
         address payToken,
         uint256 newPrice
     );
@@ -85,6 +87,8 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
 
     /// @notice Structure for listed items    
     struct Listing {
+        address[] nfts;
+        uint256[] tokenIds;
         uint256 quantity;
         uint256 pricePerItem;
         address payToken;
@@ -120,6 +124,7 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
     /// @notice nftAddress -> tokenId -> Offer
     mapping(address => mapping(uint256 => Offer)) public offers;
     
+    /// @notice NFT Address => Bool
     mapping(address => bool) public exists;
     
     
@@ -190,7 +195,7 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
                 nft.balanceOf(_msgSender(), _tokenId) >= _quantity,
                 "must hold enough nfts"
             );
-            require(
+            if (
                 nft.isApprovedForAll(_msgSender(), address(this)),
                 "item not approved"
             );
