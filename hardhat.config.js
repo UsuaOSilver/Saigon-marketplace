@@ -1,4 +1,11 @@
-require("@nomiclabs/hardhat-waffle")
+require('dotenv').config();
+require('@nomiclabs/hardhat-waffle');
+require("@nomiclabs/hardhat-etherscan");
+require('hardhat-gas-reporter');
+require('solidity-coverage');
+require('@nomiclabs/hardhat-solhint');
+require('hardhat-contract-sizer');
+require('@openzeppelin/hardhat-upgrades');
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -19,5 +26,13 @@ module.exports = {
         runs: 200
       }
     }
+  },
+  gasReporter: {
+    currency: 'USD',
+    enabled: false,
+    gasPrice: 50,
+  },
+  etherscan: {
+    apiKey: ''
   }
 }
