@@ -34,12 +34,8 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
     
     event NFTCreated(address creator, address nft);
     event NFTListed(
-        address indexed owner,
         address indexed nft,
-        uint256 tokenId,
-        uint256 quantity,
         uint256 pricePerItem,
-        address payToken
     );
     event ListingSold(
         address indexed seller,
@@ -109,6 +105,18 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
     }
     
     
+    /**************/
+    /*** Modifier ***/
+    /**************/
+    modifier notListed(
+        address _nftAddress,
+        uint256 _tokenId
+    ) {
+         Listing memory listing = listings[_nftAddress][_tokenId];
+        require(listing.quantity == 0, "already listed");
+        _;
+    }
+    
     /***********************/
     /*** State Variables ***/
     /***********************/
@@ -174,10 +182,7 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
     // / @params price
     function listNFT(
         address _nftAddress,
-        uint256 _tokenId,
-        uint256 _quantity,
         uint256 _pricePerItem,
-        address _payToken
      ) external notListed(_nftAddress, _tokenId) {
         
         if (IERC165(_nftAddress).supportsInterface(INTERFACE_ID_ERC721)) {
@@ -202,21 +207,14 @@ contract SaigonMarket is Ownable, ReentrancyGuard {
         } else {
             revert("invalid nft address");
         }
-        
-         _validPayToken(_payToken);
-        
+                
         listings[_nftAddress][_tokenId] = Listing(
             _quantity,
-           _pricePerItem,
-            _payToken,
+           _pricePerItem
         );
         emit ItemListed(
-            _msgSender(),
             _nftAddress,
-            _tokenId,
-            _quantity,
            _pricePerItem,
-            _payToken,
         );
     }
     
