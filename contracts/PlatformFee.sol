@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.9;
+pragma solidity 0.8.12;
 
+
+error PlatformFeeInfoUpdated(address _platformFeeRecipient, uint16 _platformFeeBps);
 /*
 * @title Platform Fee
 * @notice Thirdweb's `PlatformFee` is a contract extension to be used with any base contract. It exposes functios for setting and reading

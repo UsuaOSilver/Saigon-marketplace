@@ -47,7 +47,7 @@ export default function CreateIitem() {
         }
     }
     
-    async function listNFTForSale() {
+    async function createNFT() {
         const url = await uploadToIPFS()
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
@@ -55,11 +55,8 @@ export default function CreateIitem() {
         const signer = provider.getSigner()
         
         /** Create the NFT */
-        const price = ethers.utils.parseUnits(formInput.price, 'ether')
         let contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
-        let listingPrice = await contract.getListingPrice()
-        listingPrice = listingPrice.toString()
-        let transaction = await contract.createToken(url, price, { value: listingPrice })
+        let transaction = await contract.createNFT(url, price, { value: listingPrice })
         await transaction.wait()
         
         router.push('/')
@@ -94,7 +91,7 @@ export default function CreateIitem() {
                         <img className="rounded mt-4" width="350" src="fiileUrl" />
                     )
                 }
-                <button onClick={listNFTForSale} className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg">
+                <button onClick={createNFT} className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg">
                     Create NFT
                 </button>
             </div>

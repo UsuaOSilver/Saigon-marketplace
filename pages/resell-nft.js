@@ -9,7 +9,7 @@ import {marketplaceAddress} from '../config'
 import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
 
 export default function ResellNFT() {
-    const [formInput, updatFormInput] = useState({ price: '', image: '' })
+    const [formInput, updateFormInput] = useState({ price: '', image: '' })
     const router = useRouter()
     const { id, tokenURI } = router.query
     const { image, price } = formInput
@@ -32,8 +32,8 @@ export default function ResellNFT() {
         const signer = provider.getSigner()
         
         const priceFormatted = ethers.utils.parseUnits(formInput.price, 'ether')
-        let contract = new ethers.Contract(marketplaceAddress, SaionMarket.abi, signer)
-        let listingPrice = await contract.getListingPrice()
+        let contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
+        let listingPrice = await contract.getPricePerItem()
         
         listingPrice = listingPrice.toString()
         let transaction = await contract.resellToken(id, priceFormatted, { value: listingPrice })
