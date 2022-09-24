@@ -5,7 +5,7 @@ _21st September 2022_
 _ANH NGUYEN_
 
 ## OVERVIEW
-An NFT marketplace that allows users to buy, sell, and create their own auction houses with the special Variable Rate GDA (VRGDA) price strategy for infinite-period auction. 
+An NFT marketplace that allows users to buy, sell, and create their own auction houses with the special Variable Rate GDA (VRGDA) price strategy. 
 
 Payment is accepted with any ERC20 tokens depending on the auction house owner. ERC721 and ERC1155 token standards are supported. Royalties will be set by the creator of the NFT collection to honor creatives and artists.
 
