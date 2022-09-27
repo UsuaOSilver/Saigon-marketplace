@@ -4,15 +4,18 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
 
-import {marketplaceAddress} from '../config'
-
-import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonMarketAddress from '../contractsData/SaigonMarket-address.json'
+import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
+// Copy from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonNFTAddress from '../contractsData/SaigonNFT-address.json'
+import SaigonNFTAbi from '../contractsData/SaigonNFT.json'
+//Copied from '../artifacts/contracts/SaigonNFTFactory.sol/SaigonNFTFactory.json'
 
 export default function ResellNFT() {
     const [formInput, updateFormInput] = useState({ price: '', image: '' })
     const router = useRouter()
     const { id, tokenURI } = router.query
-    const { image, price } = formInput
+    const { image, name, description, price } = formInput
     
     useEffect(() => {
         fetchNFT()
@@ -46,9 +49,19 @@ export default function ResellNFT() {
         <div className='flex justify-center'>
             <div className='w-1/2 flex flex-col pb-12'>
                 <input 
-                    placeholder='Asset Price in ETH'
+                    placeholder='Listing Price in ETH'
                     className='mt-2 border rounded p-4'
-                    onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.valueAsNumber })}
+                />
+                <input 
+                    placeholder='Description'
+                    className='mt-2 border rounded p-4'
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.description })}
+                />
+                <input 
+                    placeholder='Listing Name'
+                    className='mt-2 border rounded p-4'
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.ariaValueText })}
                 />
                 {
                     image && (

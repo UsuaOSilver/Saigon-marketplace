@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chainlink/contracts": "^0.4.1",
     "@heroicons/react": "^2.0.10",
     "@openzeppelin/contracts-ethereum-package": "^3.0.0",
     "axios": "^0.27.2",

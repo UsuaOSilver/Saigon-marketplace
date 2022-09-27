@@ -3,9 +3,12 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
 
-import {marketplaceAddress} from '../config'
-
-import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonMarketAddress from '../contractsData/SaigonMarket-address.json'
+import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
+// Copy from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonNFTAddress from '../contractsData/SaigonNFT-address.json'
+import SaigonNFTAbi from '../contractsData/SaigonNFT.json'
+//Copied from '../artifacts/contracts/SaigonNFTFactory.sol/SaigonNFTFactory.json'
 
 export default function CreatorDashboard() {
     const [nfts, setNfts] = useState([])
@@ -23,7 +26,7 @@ export default function CreatorDashboard() {
         const signer = provider.getSigner()
         
         const contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
-        const data = await contract.fetchItemsListed()
+        const data = await contract.fetchOwnedListing()
         
         const items = await Promise.all(data.map(async i => {
             const tokenUri = await contract.tokenURI(i.tokenId)

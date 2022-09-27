@@ -41,8 +41,8 @@
   ],
   "include": [
     "./src",
-    "./test",
+    "test",
     "./*",
     "./config"
-  ]
+, "components"  ]
 }

@@ -31,7 +31,7 @@ Payment is accepted with any ERC20 tokens depending on the auction house owner. 
     - Resell NFT page: users can input the information for the NFT they want to put on sale
     - Create Auction House page: users can input the start price of the NFT, the price change rate for their collection and the number of items in the collection. A graph implementing VRGDA showing how price changes with the user inputs will be displayed to map out a clear plan going forward for the auction.  
 
-### Smart Contracts: 
+### Smart Contracts
   
 1. SaigonNftFactory
     - The `mint()` function allows user to mint the NFT and pay the NFT creator.
@@ -39,13 +39,14 @@ Payment is accepted with any ERC20 tokens depending on the auction house owner. 
 2. SaigonMarket
     - A mapping to keep track of every NFT listing. 
     - A mapping to keep track of every NFT offer. 
-    - The `Listing()` struct stores all nftAddress, tokenId, seller, owner, and price.
-    - The `createNFT()` function allows users to input NFT data to mint a token and list it in the marketplace.
+    - The `Listing` struct stores the information of the nft, the tokenId, the listingId, the seller address, the owner address, the price, and the sale status.
+    - The `createNFTListing()` function allows users to input NFT data to mint a token and list it in the marketplace.
     - The `listNFT()` function creates the sale of a NFT, trasnfers the NFT ownership.
     - The `resellToken()` function allows anyone to resell a token they have purchased. 
-    - The `fetchMarketItems()` function returns all unsold market items to display them on the landing page at the Feature section.
+    - The `createMarketSale()` function trigger a sale when the user purchases the listing.
+    - The `fetchMarketListings()` function returns all unsold market items to display them on the landing page at the Feature section.
     - The `fetchMyNFTs()` function returns only the items that the user has purchased to display them on the My NFT page.
-    - The `fetchItemsListed()` function returns only item a user has listed to display them on the Dashboard page.
+    - The `fetchOwnedListings()` function returns only item a user has listed to display them on the Dashboard page.
 
 3. SaigonAuctionHouse 
     - `createAuction()` function creates a new auction for a given item
@@ -61,10 +62,14 @@ Payment is accepted with any ERC20 tokens depending on the auction house owner. 
 
 ------
 
-## WORKFLOW VISUAL:
+## WORKFLOW VISUAL
 
 ![image](https://user-images.githubusercontent.com/48362877/190517243-f216dad0-0d01-4bca-9cba-76a5da69913e.png)
 ------
+
+## FURTHER DEVELOPMENT
+- Allow users to create a collection with customized name & symbol.
+
 
 ## DESIGNS
 

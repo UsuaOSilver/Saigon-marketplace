@@ -5,9 +5,12 @@ import Web3Modal from 'web3modal'
 import ConnectWallet from '@/components/ConnectWallet'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
 
-import { marketplaceAddress } from '../config'
-
-import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonMarketAddress from '../contractsData/SaigonMarket-address.json'
+import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
+// Copy from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonNFTAddress from '../contractsData/SaigonNFT-address.json'
+import SaigonNFTAbi from '../contractsData/SaigonNFT.json'
+//Copied from '../artifacts/contracts/SaigonNFTFactory.sol/SaigonNFTFactory.json'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -16,19 +19,22 @@ export default function Home() {
     loadNFTs()
   }, [])
   async function loadNFTs() {
-    /** Create a generic provider and query for unsold market items */
+    let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, signer)
+    let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
+        
+    /** Create a generic provider and query for unsold market listings */
     const provider = new ethers.providers.JsonRpcProvider()
-    const contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, provider)
-    const data = await contract.fetchMarketItems()
+    const contract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, provider)
+    const data = await contract.fetchMarketListings()
     
-    /* Map over items returned from smart contract and format
-     * them as weel as fetch their token metadata
+    /* Map over listings returned from smart contract and format
+     * them as well as fetch their token metadata
     */
-   const items = await Promise.all(data.map(async i => {
+   const listings = await Promise.all(data.map(async i => {
     const tokenUri = await contract.tokentURI(i.tokenId)
     const meta = await axios.get(tokenUri)
-    let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-    let item = {
+    let price = await marketplace.getTotalPrice(i.listingId)
+    let listing = {
       price,
       tokenId: i.tokenId.toNumber(),
       seller: i.seller,
@@ -37,9 +43,9 @@ export default function Home() {
       name: meta.data.name,
       description: meta.data.description,
     }
-    return item
+    return listing
    }))
-   setNfts(items)
+   setNfts(listings)
    setLoadingState('loaded')
   }
   async function buyNft(nft) {
@@ -48,7 +54,7 @@ export default function Home() {
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
-    const contract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
+    const contract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
     
     /** User will be promted to pay the asking process to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')

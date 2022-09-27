@@ -4,12 +4,16 @@ import axios from 'axios'
 import Web3Modal from 'web3modal'
 import { useRouter } from 'next/router'
 
-import { marketplaceAddress } from '../config'
+import SaigonMarketAddress from '../contractsData/SaigonMarket-address.json'
+import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
+// Copy from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
+import SaigonNFTAddress from '../contractsData/SaigonNFT-address.json'
+import SaigonNFTAbi from '../contractsData/SaigonNFT.json'
+//Copied from '../artifacts/contracts/SaigonNFTFactory.sol/SaigonNFTFactory.json'
 
-import SaigonMarket from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
 
+// Display the NFTs owned by the user
 export default function MyAssets() {
-    
     const [nfts, setNfts] = useState([])
     const [loadingState, setLoadingState] = useState('not-loaded')
     const router = useRouter()
@@ -26,11 +30,11 @@ export default function MyAssets() {
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
             
-        const marketplaceContract = new ethers.Contract(marketplaceAddress, SaigonMarket.abi, signer)
-        const data = await marketplaceContract.fetchMyNFTs()
+        const saigonMarketContract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
+        const data = await saigonMarketContract.fetchMyNFTs()
         
         const items = await Promise.all(data.map(async i => {
-            const tokenURI = await marketplaceContract.tokenURI(i.tokenId)
+            const tokenURI = await saigonMarketContract.tokenURI(i.tokenId)
             const meta = await axios.get(tokenURI)
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
             let item = {

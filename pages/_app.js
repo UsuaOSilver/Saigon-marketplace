@@ -1,3 +1,8 @@
+import SaigonMarketplaceAbi from '../contractsData/Marketplace.json'
+import SaigonMarketplaceAddress from '../contractsData/Marketplace-address.json'
+import SaigonNFTAbi from '../contractsData/NFT.json'
+import SaigonNFTAddress from '../contractsData/NFT-address.json'
+
 import '../styles/globals.css'
 import Link from 'next/link'
 
