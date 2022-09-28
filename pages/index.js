@@ -2,8 +2,8 @@ import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
-import ConnectWallet from '@/components/ConnectWallet'
-import ThemeSwitcher from '@/components/ThemeSwitcher'
+// import ConnectWallet from '@/components/ConnectWallet'
+// import ThemeSwitcher from '@/components/ThemeSwitcher'
 
 import SaigonMarketAddress from '../contractsData/SaigonMarket-address.json'
 import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
@@ -19,21 +19,21 @@ export default function Home() {
     loadNFTs()
   }, [])
   async function loadNFTs() {
-    let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, signer)
-    let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
+    
         
     /** Create a generic provider and query for unsold market listings */
     const provider = new ethers.providers.JsonRpcProvider()
-    const contract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, provider)
+    let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, provider)
+    let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, provider)
     const data = await contract.fetchMarketListings()
     
     /* Map over listings returned from smart contract and format
      * them as well as fetch their token metadata
     */
    const listings = await Promise.all(data.map(async i => {
-    const tokenUri = await contract.tokentURI(i.tokenId)
+    const tokenUri = await nft.tokentURI(i.tokenId)
     const meta = await axios.get(tokenUri)
-    let price = await marketplace.getTotalPrice(i.listingId)
+    let price = await market.getPricePerItem(i.listingId)
     let listing = {
       price,
       tokenId: i.tokenId.toNumber(),
@@ -54,11 +54,11 @@ export default function Home() {
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
-    const contract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
+    const market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
     
     /** User will be promted to pay the asking process to complete the transaction */
-    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
-    const transaction = await contract.createMarketSale(nft.tokenId, { value: price })
+    const price = ethers.utils.parseUnits(nft.pricePerItem.toString(), 'ether')
+    const transaction = await market.createMarketSale(nft.tokenId, { value: price })
     await transaction.wait()
     loadNFTs()
   }

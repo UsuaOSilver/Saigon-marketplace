@@ -369,6 +369,10 @@ contract SaigonMarket is ReentrancyGuard {
     // / @return Total price in ether
     function getFinalPrice(uint _listingId) public view returns (uint256) {
         return ((listings[_listingId].pricePerItem*(100 + feeBps))/100);
+    } 
+    
+    function getPricePerItem(uint _listingId) public view returns (uint256) {
+        return listings[_listingId].pricePerItem;
     }
     
     

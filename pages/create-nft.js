@@ -75,7 +75,7 @@ export default function CreateItem() {
         await _transaction.wait()
         // add nft to marketplace
         const pricePerItem = ethers.utils.parseEther(price.toString())
-        let __transaction = await market.createNFTListing(nft.address, tokenId, pricePerItem)
+        let __transaction = await market.createListing(nft.address, tokenId, pricePerItem)
         await __transaction.wait()
         
         router.push('/') // promt the user to Home after creating the listing
@@ -87,7 +87,7 @@ export default function CreateItem() {
                 <input 
                     placeholder="Asset Name"
                     className="mt-8 border rounded p-4"
-                    onChange={e => updateFormInput({ ...formInput, name: e.target.value })}
+                    onChange={e => updateFormInput({ ...formInput, name: e.target.ariaValueText })}
                 />
                 <textarea 
                     placeholder="Asset Description"
@@ -97,7 +97,7 @@ export default function CreateItem() {
                 <input 
                     placeholder="Asset Price in ETH"
                     className="mt-2 border rounded p-4"
-                    onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.valueAsNumber })}
                 />
                 <input 
                     type="file"

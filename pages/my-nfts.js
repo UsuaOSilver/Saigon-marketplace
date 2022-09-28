@@ -30,14 +30,15 @@ export default function MyAssets() {
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
             
-        const saigonMarketContract = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
-        const data = await saigonMarketContract.fetchMyNFTs()
+        let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, provider)
+        const market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
+        const data = await market.fetchMyNFTs()
         
-        const items = await Promise.all(data.map(async i => {
-            const tokenURI = await saigonMarketContract.tokenURI(i.tokenId)
+        const listings = await Promise.all(data.map(async i => {
+            const tokenURI = await nft.tokenURI(i.tokenId)
             const meta = await axios.get(tokenURI)
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-            let item = {
+            let listing = {
                 price,
                 tokenId: i.tokenId.toNumber(),
                 seller: i.seller,
@@ -45,9 +46,9 @@ export default function MyAssets() {
                 image: meta.data.image,
                 tokenURI
             }
-            return item
+            return listing
         }))
-        setNfts(items)
+        setNfts(listings)
         setLoadingState('loaded')
     }
     
