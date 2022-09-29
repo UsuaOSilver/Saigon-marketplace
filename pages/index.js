@@ -11,6 +11,9 @@ import SaigonMarketAbi from '../contractsData/SaigonMarket.json'
 import SaigonNFTAddress from '../contractsData/SaigonNFT-address.json'
 import SaigonNFTAbi from '../contractsData/SaigonNFT.json'
 //Copied from '../artifacts/contracts/SaigonNFTFactory.sol/SaigonNFTFactory.json'
+import PriceSaigonMarketAddress from '../contractsData/PriceSaigonMarket-address.json'
+import PriceSaigonMarketAbi from '../contractsData/PriceSaigonMarket.json'
+//Copied from '../artifacts/contracts/SaigonMarket.sol/SaigonMarket.json'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -19,12 +22,11 @@ export default function Home() {
     loadNFTs()
   }, [])
   async function loadNFTs() {
-    
-        
     /** Create a generic provider and query for unsold market listings */
     const provider = new ethers.providers.JsonRpcProvider()
     let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, provider)
     let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, provider)
+    let chainlinkPrice = new ethers.Contract(PriceSaigonMarketAddress, PriceSaigonMarketAbi.abi, provider)
     const data = await contract.fetchMarketListings()
     
     /* Map over listings returned from smart contract and format
@@ -33,10 +35,13 @@ export default function Home() {
    const listings = await Promise.all(data.map(async i => {
     const tokenUri = await nft.tokentURI(i.tokenId)
     const meta = await axios.get(tokenUri)
-    let price = await market.getPricePerItem(i.listingId)
+    let ethPrice = await market.getPricePerItem(i.listingId)
+    let ethUsdRate = await chainlinkPrice.getLatestPrice() 
+    let usdPrice = ethPrice * ethUsdRate
     let listing = {
-      price,
-      tokenId: i.tokenId.toNumber(),
+      ethPrice,
+      usdPrice,
+      listingId: i.listingId.toNumber(),
       seller: i.seller,
       owner: i.owner,
       image: meta.data.image,
@@ -58,7 +63,7 @@ export default function Home() {
     
     /** User will be promted to pay the asking process to complete the transaction */
     const price = ethers.utils.parseUnits(nft.pricePerItem.toString(), 'ether')
-    const transaction = await market.createMarketSale(nft.tokenId, { value: price })
+    const transaction = await market.createMarketSale(nft.listingId, { value: price })
     await transaction.wait()
     loadNFTs()
   }
@@ -78,7 +83,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className='p-4 bg-black'>
-                  <p className='text-2xl font-bold text-white'>{nft.price} ETH</p>
+                  <p className='text-2xl font-bold text-white'>{nft.ethPrice} ETH ~ ${nft.usdPrice}</p>
                   <button className='mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded' onClick={() => buyNft(nft)}>Buy</button>
                 </div>
               </div>

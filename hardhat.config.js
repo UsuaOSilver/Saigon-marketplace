@@ -11,12 +11,47 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 31337,
     },
-    // mumbai: {
-    //   url: "https://rpc-mumbai.maticvigil.com",
-    //   accounts: [process.env.privateKey]
-    // }
+    localhost: {
+      chainId: 31337,
+    },
+    goerli: {
+        url: INFURA_GOERLI_RPC_URL,
+        accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+        saveDeployments: true,
+        chainId: 5,
+    },
+    polygon: {
+        url: POLYGON_MAINNET_RPC_URL,
+        accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+        saveDeployments: true,
+        chainId: 137,
+    },
+    mumbai: {
+        url: MUMBAI_RPC_URL,
+        accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+        saveDeployments: true,
+        chainId: 80001,
+    },
+  },
+  etherscan: {
+    // npx hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
+    apiKey: {
+        goerli: ETHERSCAN_API_KEY,
+        polygon: POLYGONSCAN_API_KEY,
+    },
+  },
+  gasReporter: {
+    enabled: REPORT_GAS,
+    currency: "USD",
+    outputFile: "gas-report.txt",
+    noColors: true,
+    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+  },
+  contractSizer: {
+    runOnCompile: false,
+    only: ["SaigonMarket"],
   },
   solidity: {
     version: "0.8.12",
@@ -24,15 +59,10 @@ module.exports = {
       optimizer: {
         enabled: true,
         runs: 200
-      }
-    }
+      },
+    },
   },
-  gasReporter: {
-    currency: 'USD',
-    enabled: false,
-    gasPrice: 50,
+  mocha: {
+    timeout: 200000, // 200 seconds max for running tests
   },
-  etherscan: {
-    apiKey: ''
-  }
 }

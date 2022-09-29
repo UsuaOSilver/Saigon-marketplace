@@ -66,17 +66,21 @@ export default function CreateItem() {
         let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, signer)
         let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
         // mint nft
-        let transaction = await nft.mint(url)
-        await transaction.wait()
+        console.log("Minting NFT...")
+        let mintTx = await nft.mint(url)
+        const mintTxReceipt = await mintTx.wait()
         // get tokenId of new nft
-        const tokenId = await nft.newTokenId()
+        const tokenId = mintTxReceipt.event[0].args.tokenId
         // approve marketplace to spend nft
-        let _transaction = await nft.setApprovalForAll(market.address, true)
-        await _transaction.wait()
+        console.log("Approving NFT...")
+        let approvalTx = await nft.setApprovalForAll(market.address, true)
+        await approvalTx.wait()
         // add nft to marketplace
+        console.log("Listing NFT...")
         const pricePerItem = ethers.utils.parseEther(price.toString())
-        let __transaction = await market.createListing(nft.address, tokenId, pricePerItem)
-        await __transaction.wait()
+        let transaction = await market.createListing(nft.address, tokenId, pricePerItem)
+        await transaction.wait()
+        console.log("NFT Listed!")
         
         router.push('/') // promt the user to Home after creating the listing
     }

@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "../contracts/SaigonNftFactory.sol";
@@ -27,6 +28,7 @@ error ListingDoesNotExist();
 /// @title Contract of the SaiGon Martketplace
 contract SaigonMarket is ReentrancyGuard {
     using SafeMath for uint256;
+    using Address for address;
     using SafeERC20 for IERC20;
     using Counters for Counters.Counter;
 
@@ -224,7 +226,7 @@ contract SaigonMarket is ReentrancyGuard {
     // / @notice Mint a token and list it in the marketplace 
     // / @params tokenURI
     // / @params price
-    function createNFTListing(
+    function createListing(
                         IERC721 _nft, 
                         uint256 _tokenId,
                         uint256 _pricePerItem
@@ -272,9 +274,9 @@ contract SaigonMarket is ReentrancyGuard {
         listing.sold = true;
         seller = payable(address(0));
         _listingsSold.increment();
-        listing.nft.transferFrom(address(this), msg.sender, listing.tokenId);
+        listing.nft.safeTransferFrom(address(this), msg.sender, listing.tokenId);
         
-        // Transfer Cost and Fee
+        // Safe transfer Cost and Fee
         (bool success, ) = seller.call{value: price}("");
         if(!success) revert TransferFailed();
         (bool _success, ) = feeReceiver.call{value: fee}("");
@@ -380,9 +382,9 @@ contract SaigonMarket is ReentrancyGuard {
     /** Internal & Private **/
     /************************/
     
-    function _getNow() internal view virtual returns (uint256) {
-        return block.timestamp;
-    }
+    // function _getNow() internal view virtual returns (uint256) {
+    //     return block.timestamp;
+    // }
 
     // function _validOwner(
     //     address _nftAddress,

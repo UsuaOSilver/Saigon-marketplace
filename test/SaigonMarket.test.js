@@ -5,15 +5,16 @@ const toWei = (num) => ethers.utils.parseEther(num.toString())
 const fromWei = (num) => ethers.utils.formatEther(num)
 
 describe("SaigonMarket", function() {
-  let SaigonNFT, saigonNFT, SaigonMarket, saigonMarket,  deployer, addr1, addr2, addrs;
+  let SaigonNFT, saigonNFT, SaigonMarket, saigonMarket, deployer, addr1, addr2, addrs;
   let feeBps = 1;
-  let URI = "Uri"; 
+  let URI_1 = "https://www.token-abc-location.com"; 
+  let URI_2 = "https://www.token-cba-location.com"; 
   
   beforeEach(async function () {
     /** Get ContractFactories and Signers */
     SaigonNFT = await ethers.getContractFactory("SaigonNFT");
     SaigonMarket = await ethers.getContractFactory("SaigonMarket");
-    const [_, buyerAddress] = await ethers.getSigners()
+    const [_, deployer, addr1, addr2, buyerAddress] = await ethers.getSigners()
     
     /** Deploy contracts */
     saigonNFT = await SaigonNFT.deploy();
@@ -37,6 +38,22 @@ describe("SaigonMarket", function() {
       expect(await saigonMarket.feePercent()).to.equal(feeBps);
     });
   });
+  
+  describe("Minting NFTs", function () {
+
+    it("Should track each minted NFT", async function () {
+      // addr1 mints an nft
+      await saigonNFT.connect(addr1).mint(URI_1)
+      expect(await saigonNFT._tokenIds()).to.equal(1);
+      expect(await saigonNFT.balanceOf(addr1.address)).to.equal(1);
+      expect(await saigonNFT.tokenURI(1)).to.equal(URI_1);
+      // addr2 mints an nft
+      await saigonNFT.connect(addr2).mint(URI_2)
+      expect(await saigonNFT._tokenIds()).to.equal(2);
+      expect(await saigonNFT.balanceOf(addr2.address)).to.equal(1);
+      expect(await saigonNFT.tokenURI(2)).to.equal(URI_2);
+    });
+  })
   
   it("Should create and execute market sales", async function() {
     
