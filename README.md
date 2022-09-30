@@ -1,18 +1,20 @@
 # 🕰️ CHỢ SÀI GÒN MARKET🕰️
+The place for all Vietnamese art, fashion, music, and subculture collectibles.
+
+COMING SOON...
 
 ### 🧩 Tech stack:
 - JavaScript
-- Typescript
 - Hardhat 
 - Next.js
 - Ethers.js
-- Alchemy
+- Infura
 - IPFS
 - theGraph
-- Chainlink Oracle
-- [DApp Starter](https://github.com/m1guelpf/dapp-starter)
+- Chainlink Price Feed
 - wagmi.sh
 - Tailwindcss
+- Surge
 
 🧪 Tested with:
 - Slither

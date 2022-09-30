@@ -25,7 +25,6 @@ contract PriceSaigonMarket {
      */
     function getLatestPrice() public view returns (int) {
         (, int256 price, , , ) = priceFeed.latestRoundData();
-        require(timeStamp > 0, "Round not complete");
         return price;
     }
 }

@@ -31,7 +31,10 @@ export default function CreateItem() {
                 }
             )
             const url = `https://ipfs.infura.io/ipfs/${added.path}`
-            setFileUrl(url)
+            client.pin.add(added.path).then((res) => {
+                console.log(res)
+                setFileUrl(url)
+            })
         } catch (error) {
             console.log('Error uploading file: ', error)
         }
@@ -95,7 +98,7 @@ export default function CreateItem() {
                 />
                 <textarea 
                     placeholder="Asset Description"
-                    className="mt-w border rounded p-4"
+                    className="mt-2 border rounded p-4"
                     onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
                 />
                 <input 
