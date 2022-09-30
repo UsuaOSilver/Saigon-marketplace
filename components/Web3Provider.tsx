@@ -1,16 +1,15 @@
 import React from 'react';
 import { useTheme } from 'next-themes'
-import { APP_NAME } from '../consts'
 import { createClient, WagmiConfig } from 'wagmi'
 import { ConnectKitProvider, getDefaultClient } from 'connectkit'
 
-const alchemyId = process.env.ALCHEMY_ID;
+const infuraId = process.env.INFURA_IPFS_PROJECT_ID;
 
 const client = createClient(
 	getDefaultClient({
-		appName: APP_NAME,
+		appName: 'SAIGON_MARKETPLACE',
 		autoConnect: true,
-		alchemyId,
+		infuraId,
 	})
 )
 
