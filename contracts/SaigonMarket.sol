@@ -246,14 +246,14 @@ contract SaigonMarket is ReentrancyGuard {
     // / @params tokenURI
     // / @params price
     function createListing(
-                        IERC721 _nft, 
+                        address _nftAddress, 
                         uint256 _tokenId,
                         uint256 _pricePerItem
     ) 
         external 
         payable 
-        isOwner(address(_nft), _tokenId, msg.sender)
-        notListed(address(_nft), _tokenId) 
+        isOwner(_nftAddress, _tokenId, msg.sender)
+        notListed(_nftAddress, _tokenId) 
         nonReentrant 
     {
         if(_pricePerItem <= 0) revert PriceMustBeAboveZero();
@@ -263,13 +263,13 @@ contract SaigonMarket is ReentrancyGuard {
         uint256 listingId = _listingIds.current();
                         
         /*exists[address(_nft)] = true;*/
-        listNFT(address(_nft), _tokenId, listingId, _pricePerItem);
+        listNFT(_nftAddress, _tokenId, listingId, _pricePerItem);
         
-        _nft.transferFrom(msg.sender, address(this), _tokenId);
+        IERC721(_nftAddress).transferFrom(msg.sender, address(this), _tokenId);
         
         emit NFTListed(
             // listingId,
-            address(_nft),
+            _nftAddress,
             _tokenId,
             payable(msg.sender),
             payable(address(this)),
@@ -281,15 +281,16 @@ contract SaigonMarket is ReentrancyGuard {
     // / @notice Allow someone to resell a token they have purchased 
     // / @params tokenId token ID
     // / @params _pricePerItem listing price
-    function resellNFT(IERC721 _nft, uint256 _listingId, uint256 _pricePerItem) 
+    function resellNFT(address _nftAddress, uint256 _listingId, uint256 _pricePerItem) 
         external 
         payable 
-        isOwner(address(_nft), listings[address(_nft)][_listingId].tokenId, msg.sender)
+        isOwner(_nftAddress, listings[_nftAddress][_listingId].tokenId, msg.sender)
+        notListed(_nftAddress, listings[_nftAddress][_listingId].tokenId) 
         nonReentrant 
     {
         if(_pricePerItem <= 0) revert PriceMustBeAboveZero();
-        uint _finalPrice = getFinalPrice(address(_nft), _listingId);
-        Listing memory listing = listings[address(_nft)][_listingId];
+        uint _finalPrice = getFinalPrice(_nftAddress, _listingId);
+        Listing memory listing = listings[_nftAddress][_listingId];
         listing.sold = false;
         listing.pricePerItem = _pricePerItem;
         listing.seller = payable(msg.sender);
@@ -298,13 +299,15 @@ contract SaigonMarket is ReentrancyGuard {
         
         listing.nft.transferFrom(msg.sender, address(this), listing.tokenId);
         
+        uint256 testPrice = _pricePerItem;
+        
         emit NFTListedForResell(
             // _listingId,
-            address(_nft),
+            _nftAddress,
             listing.tokenId,
             payable(msg.sender),
             payable(address(this)),
-           _pricePerItem,
+           testPrice,
            false
         );
     }
@@ -312,18 +315,18 @@ contract SaigonMarket is ReentrancyGuard {
     // / @notice Create the sale of a marketplace item. 
     // / @dev Trasnfer ownership of the item, as well as funds between parties 
     // / @params tokenId  The Id of the NFT 
-    function createMarketSale(IERC721 _nft, uint256 _listingId) 
+    function createMarketSale(address _nftAddress, uint256 _listingId) 
         external 
         payable 
         isListed(_listingId)
         nonReentrant 
     {
-        uint _finalPrice = getFinalPrice(address(_nft), _listingId);
-        Listing memory listing = listings[address(_nft)][_listingId];
+        uint _finalPrice = getFinalPrice(_nftAddress, _listingId);
+        Listing memory listing = listings[_nftAddress][_listingId];
         uint price = listing.pricePerItem;
         uint fee = _finalPrice - price;
         address seller = listing.seller;
-        if(msg.value < _finalPrice) revert PriceNotMet(address(_nft), listing.tokenId, _finalPrice);
+        if(msg.value < _finalPrice) revert PriceNotMet(_nftAddress, listing.tokenId, _finalPrice);
         if(listing.sold) revert ListingSold();
         listing.owner = payable(msg.sender);
         listing.sold = true;

@@ -61,9 +61,9 @@ export default function Home() {
     const signer = provider.getSigner()
     const market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
     
-    /** User will be promted to pay the asking process to complete the transaction */
-    const price = ethers.utils.parseUnits(nft.pricePerItem.toString(), 'ether')
-    const transaction = await market.createMarketSale(nft.listingId, { value: price })
+    /** User will be promted to pay the asking finalPrice to complete the transaction */
+    const price = ethers.utils.parseUnits(market.getFinalPrice(nft.address, nft.listingId).toString(), 'ether')
+    const transaction = await market.createMarketSale(nft.address, nft.listingId, { value: price })
     await transaction.wait()
     loadNFTs()
   }

@@ -69,7 +69,7 @@ describe("SaigonMarket Unit Tests", function() {
     })
     it("Should track newly created listing, transfer NFT from seller to marketplace and emit NFTListed event", async function () {
       // addr1 offers their nft at a price of 1 ether
-      await expect(saigonMarket.connect(addr1).createListing(saigonNFT.address, 1 , price))
+      await expect(saigonMarket.connect(addr1).createListing(saigonNFT.address, 1, price))
         .to.emit(saigonMarket, "NFTListed")
         .withArgs(
           // 1,
@@ -85,7 +85,7 @@ describe("SaigonMarket Unit Tests", function() {
       // listing count should now equal 1
       expect(await saigonMarket._listingIds()).to.equal(1)
       // Get listing from listings mapping then check fields to ensure they are correct
-      const listing = await saigonMarket.listings(1)
+      const listing = await saigonMarket.listings(saigonNFT.address, 1)
       expect(listing.listingId).to.equal(1)
       expect(listing.nft).to.equal(saigonNFT.address)
       expect(listing.tokenId).to.equal(1)
@@ -115,9 +115,9 @@ describe("SaigonMarket Unit Tests", function() {
       const sellerInitalEthBal = await addr1.getBalance()
       const operatorInitialEthBal = await deployer.getBalance()
       // fetch listings total price (market fees + nft price)
-      totalPriceInWei = await saigonMarket.getFinalPrice(1);
+      totalPriceInWei = await saigonMarket.getFinalPrice(saigonNFT.address, 1);
       // addr 2 purchases listing.
-      await expect(saigonMarket.connect(addr2).createMarketSale(1, {value: totalPriceInWei}))
+      await expect(saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 1, {value: totalPriceInWei}))
       .to.emit(saigonMarket, "ListingPurchased")
         .withArgs(
           addr1.address,
@@ -130,7 +130,7 @@ describe("SaigonMarket Unit Tests", function() {
       const sellerFinalEthBal = await addr1.getBalance()
       const operatorFinalEthBal = await deployer.getBalance()
       // listing should be marked as sold
-      expect((await saigonMarket.listings(1)).sold).to.equal(true)
+      expect((await saigonMarket.listings(saigonNFT.address, 1)).sold).to.equal(true)
       // Seller should receive payment for the price of the NFT sold.
       expect(+fromWei(sellerFinalEthBal)).to.equal(+price + +fromWei(sellerInitalEthBal))
       // operator should receive fee
@@ -173,9 +173,9 @@ describe("SaigonMarket Unit Tests", function() {
       // addr1 makes their nfts marketplace listings.
       await saigonMarket.connect(addr1).createListing(saigonNFT.address, 1 , price)
       await saigonMarket.connect(addr1).createListing(saigonNFT.address, 2 , price)
-      let totalPriceInWei = await saigonMarket.getFinalPrice(1);
+      let totalPriceInWei = await saigonMarket.getFinalPrice(saigonNFT.address, 1);
       // addr 2 purchases listing.
-      await saigonMarket.connect(addr2).createMarketSale(1, {value: totalPriceInWei})
+      await saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 1, {value: totalPriceInWei})
     });
     it("Should update activated listing for resell", async function () {
       // addr2 offers their nft at a price of 2 ether
@@ -195,7 +195,7 @@ describe("SaigonMarket Unit Tests", function() {
         // listing count should still equal 2
         expect(await saigonMarket._listingIds()).to.equal(2)
         // Get listing from listings mapping then check fields to ensure they are correct
-        const listing = await saigonMarket.listings(1)
+        const listing = await saigonMarket.listings(saigonNFT.address, 1)
         expect(listing.listingId).to.equal(1)
         expect(listing.nft).to.equal(saigonNFT.address)
         expect(listing.tokenId).to.equal(1)

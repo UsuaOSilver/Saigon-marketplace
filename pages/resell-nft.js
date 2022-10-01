@@ -33,9 +33,9 @@ export default function ResellNFT() {
         
         const priceFormatted = ethers.utils.parseUnits(formInput.price, 'ether')
         let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
-        let listingPrice = await market.getPricePerItem()
+        let fee = await (market.getFinalPrice() - )
         
-        listingPrice = listingPrice.toString()
+        fee = fee.toString()
         let transaction = await market.resellToken(id, priceFormatted, { value: listingPrice })
         await transaction.wait()
         
