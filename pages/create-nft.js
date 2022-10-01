@@ -71,7 +71,9 @@ export default function CreateItem() {
         // mint nft
         console.log("Minting NFT...")
         let mintTx = await nft.mint(url)
+        console.log(mintTx)
         const mintTxReceipt = await mintTx.wait()
+        console.log(mintTxReceipt)
         // get tokenId of new nft
         const tokenId = mintTxReceipt.event[0].args.tokenId
         // approve marketplace to spend nft
@@ -80,7 +82,7 @@ export default function CreateItem() {
         await approvalTx.wait()
         // add nft to marketplace
         console.log("Listing NFT...")
-        const pricePerItem = ethers.utils.parseEther(price.toString())
+        const pricePerItem = ethers.utils.parseUnits(formInput.price, 'ether')
         let transaction = await market.createListing(nft.address, tokenId, pricePerItem)
         await transaction.wait()
         console.log("NFT Listed!")

@@ -21,10 +21,10 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 31337,
+      chainId: 1337,
     },
     localhost: {
-      chainId: 31337,
+      chainId: 1337,
     },
     goerli: {
         url: GOERLI_RPC_URL,
@@ -64,7 +64,14 @@ module.exports = {
     only: ["SaigonMarket"],
   },
   solidity: {
-    version: "0.8.12",
+    compilers: [
+      {
+          version: "0.8.12",
+      },
+      {
+          version: "0.4.24",
+      },
+  ],
     settings: {
       optimizer: {
         enabled: true,
@@ -76,3 +83,5 @@ module.exports = {
     timeout: 200000, // 200 seconds max for running tests
   },
 }
+
+

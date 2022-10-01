@@ -27,12 +27,12 @@ export default function CreatorDashboard() {
         
         let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, signer)
         let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
-        const data = await market.fetchOwnedListing()
+        const data = await market.fetchOwnedListing(nft.address)
         
         const listings = await Promise.all(data.map(async i => {
             const tokenUri = await nft.tokenURI(i.tokenId)
             const meta = await axios.get(tokenUri)
-            let price = ethers.utils.formatUnits(i.getPricePerItem.toString(), 'ether')
+            let price = ethers.utils.formatUnits(i.pricePerItem.toString(), 'ether')
             let listing = {
                 price,
                 tokenId: i.tokenId.toNumber(),

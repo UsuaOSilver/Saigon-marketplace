@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 const fs = require('fs');
 const { network } = require("hardhat")
-const { developmentChains, VERIFICATION_BLOCK_CONFIRMATIONS } = require("../helper-hardhat-config")
+const { developmentChains } = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify")
 
 async function main() {
@@ -26,10 +26,10 @@ async function main() {
   savedFrontendFiles(priceSaigonMarket, "PriceSaigonMarket");
   
   // Verify the deployment
-  if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-    console.log("Verifying...")
-    await verify(nftMarketplace.address, arguments)
-}
+  // if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+  //   console.log("Verifying...")
+  //   await verify(saigonMarket.address, arguments)
+  // }
 }
 
 function savedFrontendFiles(contract, name) {

@@ -32,7 +32,7 @@ export default function MyAssets() {
             
         let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, provider)
         const market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
-        const data = await market.fetchMyNFTs()
+        const data = await market.fetchMyNFTs(nft.address)
         
         const listings = await Promise.all(data.map(async i => {
             const tokenURI = await nft.tokenURI(i.tokenId)

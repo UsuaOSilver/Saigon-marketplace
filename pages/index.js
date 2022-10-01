@@ -27,7 +27,7 @@ export default function Home() {
     let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, provider)
     let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, provider)
     let chainlinkPrice = new ethers.Contract(PriceSaigonMarketAddress, PriceSaigonMarketAbi.abi, provider)
-    const data = await contract.fetchMarketListings()
+    const data = await contract.fetchMarketListings(nft.address)
     
     /* Map over listings returned from smart contract and format
      * them as well as fetch their token metadata
@@ -35,7 +35,7 @@ export default function Home() {
    const listings = await Promise.all(data.map(async i => {
     const tokenUri = await nft.tokentURI(i.tokenId)
     const meta = await axios.get(tokenUri)
-    let ethPrice = await market.getPricePerItem(i.listingId)
+    let ethPrice = await market.getPricePerItem(nft.address, i.listingId)
     let ethUsdRate = await chainlinkPrice.getLatestPrice() 
     let usdPrice = ethPrice * ethUsdRate
     let listing = {
