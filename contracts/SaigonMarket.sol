@@ -233,7 +233,7 @@ contract SaigonMarket is ReentrancyGuard {
                 
         listings[_nftAddress][_listingId] = Listing(
             payable(msg.sender),
-            payable(address(0)),
+            payable(address(this)),
             IERC721(_nftAddress),
             _listingId,
             _tokenId,
@@ -299,7 +299,7 @@ contract SaigonMarket is ReentrancyGuard {
         
         listing.nft.transferFrom(msg.sender, address(this), listing.tokenId);
         
-        uint256 testPrice = _pricePerItem;
+        uint256 newPrice = _pricePerItem;
         
         emit NFTListedForResell(
             // _listingId,
@@ -307,8 +307,8 @@ contract SaigonMarket is ReentrancyGuard {
             listing.tokenId,
             payable(msg.sender),
             payable(address(this)),
-           testPrice,
-           false
+            newPrice,
+            false
         );
     }
     

@@ -91,6 +91,9 @@ describe("SaigonMarket Unit Tests", function() {
       expect(listing.tokenId).to.equal(1)
       expect(listing.pricePerItem).to.equal(price)
       expect(listing.sold).to.equal(false)
+      console.log("listing `1` seller: ", listing.seller);
+      console.log("listing `1` owner: ", listing.owner);
+      console.log("saigonMarket address: ", saigonMarket.address);
     });
     it("Should fail if price is set to zero", async function () {
       await expect(
@@ -110,12 +113,16 @@ describe("SaigonMarket Unit Tests", function() {
       await saigonNFT.connect(addr1).setApprovalForAll(saigonMarket.address, true)
       // addr1 makes their nft a marketplace listing.
       await saigonMarket.connect(addr1).createListing(saigonNFT.address, 1 , price)
-    });
-    it("Should update listing as sold, pay seller, transfer NFT to buyer, charge fees and emit a ListingSold event", async function () {
-      const sellerInitalEthBal = await addr1.getBalance()
-      const operatorInitialEthBal = await deployer.getBalance()
       // fetch listings total price (market fees + nft price)
       totalPriceInWei = await saigonMarket.getFinalPrice(saigonNFT.address, 1);
+    });
+    it("Should update listing as sold, pay seller, transfer NFT to buyer, charge fees and emit a ListingPurchased event", async function () {
+      console.log("addr1 ", addr1.address);
+      console.log("addr2 ", addr2.address);
+      console.log("deployer ", deployer.address);
+  
+      const sellerInitalEthBal = await addr1.getBalance()
+      const operatorInitialEthBal = await deployer.getBalance()
       // addr 2 purchases listing.
       await expect(saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 1, {value: totalPriceInWei}))
       .to.emit(saigonMarket, "ListingPurchased")
@@ -138,27 +145,31 @@ describe("SaigonMarket Unit Tests", function() {
       // The buyer should now own the nft
       expect(await saigonNFT.ownerOf(1)).to.equal(addr2.address);
     });
-    it("Should fail for invalid listing ids, sold listing and when not enough ether is paid", async function () {
+    it("Should fail for invalid listing ids", async function () {
       // fails for invalid listing ids
       await expect(
-        saigonMarket.connect(addr2).createMarketSale(2, {value: totalPriceInWei})
+        saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 2, {value: totalPriceInWei})
       ).to.be.revertedWith("ListingNotExist");
       await expect(
-        saigonMarket.connect(addr2).createMarketSale(0, {value: totalPriceInWei})
+        saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 0, {value: totalPriceInWei})
       ).to.be.revertedWith("ListingNotExist");
+    })
+    it("Should fail if listing already sold", async function () {
+      // addr2 purchases listing 1
+      await saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 1, {value: totalPriceInWei})
+      // addr3 tries purchasing listing 1 after its been sold 
+      await expect(
+        saigonMarket.connect(addr3).createMarketSale(saigonNFT.address, 1, {value: totalPriceInWei})
+      ).to.be.revertedWith("ListingSold");
+    });
+    it("Should fail when not enough ether is paid", async function () {
       // Fails when not enough ether is paid with the transaction. 
       // In this instance, fails when buyer only sends enough ether to cover the price of the nft
       // not the additional market fee.
       await expect(
-        saigonMarket.connect(addr2).createMarketSale(1, {value: price})
+        saigonMarket.connect(addr2).createMarketSale(saigonNFT.address, 1, {value: price})
       ).to.be.revertedWith("PriceNotMet"); 
-      // addr2 purchases listing 1
-      await saigonMarket.connect(addr2).createMarketSale(1, {value: totalPriceInWei})
-      // addr3 tries purchasing listing 1 after its been sold 
-      await expect(
-        saigonMarket.connect(addr3).createMarketSale(1, {value: totalPriceInWei})
-      ).to.be.revertedWith("ListingSold");
-    });
+    })
   })
   
   describe("resellNFT", async function() {
