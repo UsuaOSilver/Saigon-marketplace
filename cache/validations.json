@@ -647,9 +647,9 @@
       "SaigonMarket": {
         "src": "contracts\\SaigonMarket.sol:33",
         "version": {
-          "withMetadata": "5ddb09d75d825b1774cff6aaf43bd7cb6f31252c96e03a81a5a80f89d777de38",
-          "withoutMetadata": "6c63ebfb8adc733c014996e93e99d3109cbe563f12d221f599e9b6a94ee3da75",
-          "linkedWithoutMetadata": "6c63ebfb8adc733c014996e93e99d3109cbe563f12d221f599e9b6a94ee3da75"
+          "withMetadata": "e3626faa6790b5608a10ee2706f5cd9b65ec506b1af8fdf87cde8bf9a9d599c8",
+          "withoutMetadata": "25a6356b3e8bb1a80a82b1fd1c29831005bf67d965142a505ddcdb27b33affd5",
+          "linkedWithoutMetadata": "25a6356b3e8bb1a80a82b1fd1c29831005bf67d965142a505ddcdb27b33affd5"
         },
         "inherit": [
           "ReentrancyGuard"
@@ -677,17 +677,17 @@
           {
             "kind": "constructor",
             "contract": "SaigonMarket",
-            "src": "contracts\\SaigonMarket.sol:187"
+            "src": "contracts\\SaigonMarket.sol:188"
           },
           {
             "kind": "state-variable-immutable",
             "name": "operator",
-            "src": "contracts\\SaigonMarket.sol:174"
+            "src": "contracts\\SaigonMarket.sol:175"
           },
           {
             "kind": "state-variable-immutable",
             "name": "feeBps",
-            "src": "contracts\\SaigonMarket.sol:175"
+            "src": "contracts\\SaigonMarket.sol:176"
           }
         ],
         "layout": {
@@ -722,7 +722,7 @@
               "slot": "3",
               "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Listing)3031_storage))",
               "contract": "SaigonMarket",
-              "src": "contracts\\SaigonMarket.sol:178"
+              "src": "contracts\\SaigonMarket.sol:179"
             }
           ],
           "types": {

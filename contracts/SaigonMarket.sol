@@ -145,9 +145,10 @@ contract SaigonMarket is ReentrancyGuard {
 
     modifier isListed(uint256 listingId) {
         if (listingId <= 0 && listingId > _listingIds.current()) {
-            revert ListingNotExist();
+            revert ListingNotExist(); 
         }
         _;
+
     }
     
     modifier isOwner(
@@ -287,7 +288,7 @@ contract SaigonMarket is ReentrancyGuard {
         nonReentrant 
     {
         if(_newPrice <= 0) revert PriceMustBeAboveZero();
-        Listing memory listing = listings[_nftAddress][_listingId];
+        Listing storage listing = listings[_nftAddress][_listingId];
         listing.sold = false;
         listing.pricePerItem = _newPrice;
         listing.seller = payable(msg.sender);
@@ -318,7 +319,7 @@ contract SaigonMarket is ReentrancyGuard {
         nonReentrant 
     {
         uint _finalPrice = getFinalPrice(_nftAddress, _listingId);
-        Listing memory listing = listings[_nftAddress][_listingId];
+        Listing storage listing = listings[_nftAddress][_listingId];
         uint price = listing.pricePerItem;
         uint fee = _finalPrice - price;
         address seller = listing.seller;
