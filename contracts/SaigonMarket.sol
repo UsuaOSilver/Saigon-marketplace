@@ -112,19 +112,19 @@ contract SaigonMarket is ReentrancyGuard {
         bool sold;
     }
     
-    /// @notice Structure for offer
-    struct Offer {
-        IERC20 payToken;
-        uint256 quantity;
-        uint256 pricePerItem;
-        uint256 deadline;
-    }
+    // /// @notice Structure for offer
+    // struct Offer {
+    //     IERC20 payToken;
+    //     uint256 quantity;
+    //     uint256 pricePerItem;
+    //     uint256 deadline;
+    // }
     
-    struct CollectionRoyalty {
-        uint16 royalty;
-        address creator;
-        address feeRecipient;
-    }
+    // struct CollectionRoyalty {
+    //     uint16 royalty;
+    //     address creator;
+    //     address feeRecipient;
+    // }
     
     
     /*****************/
@@ -192,18 +192,13 @@ contract SaigonMarket is ReentrancyGuard {
     
     /************************/
     /*** Sell Functions ***/
-    /************************/
-    
-    // / @notice Updates the listing price of the contract 
-    // / @params _pricePerItem
-    // function updatePricePerItem(uint _pricePerItem) public payable {
-    //     require(owner == msg.sender, "Only marketplace owner can update listing price.");
-    //     pricePerItem = _pricePerItem;
-    // }
+    /************************/    
     
     // / @notice Method for listing NFT
     // / @params _nftAddress token address
     // / @params _tokenId token ID
+    // / @params _listingId listing ID
+    // / @params _pricePerItem listing price
     function listNFT(
         address _nftAddress,
         uint256 _tokenId,
@@ -243,8 +238,9 @@ contract SaigonMarket is ReentrancyGuard {
     }
     
     // / @notice Mint a token and list it in the marketplace 
-    // / @params tokenURI
-    // / @params price
+    // / @params _nftAddress NFT address
+    // / @params _tokenId token ID
+    // / @params _pricePerItem listing price
     function createListing(
                         address _nftAddress, 
                         uint256 _tokenId,
@@ -267,56 +263,56 @@ contract SaigonMarket is ReentrancyGuard {
         
         IERC721(_nftAddress).transferFrom(msg.sender, address(this), _tokenId);
         
+        Listing memory listing = listings[_nftAddress][listingId];
         emit NFTListed(
             // listingId,
             _nftAddress,
             _tokenId,
-            payable(msg.sender),
-            payable(address(this)),
-           _pricePerItem,
-           false
+            listing.seller,
+            listing.owner,
+            listing.pricePerItem,
+            listing.sold
         );
     }
     
     // / @notice Allow someone to resell a token they have purchased 
-    // / @params tokenId token ID
-    // / @params _pricePerItem listing price
-    function resellNFT(address _nftAddress, uint256 _listingId, uint256 _pricePerItem) 
+    // / @params _nftAddress NFT address
+    // / @params _listingId listing ID
+    // / @params _newPrice new listing price
+    function resellNFT(address _nftAddress, uint256 _listingId, uint256 _newPrice) 
         external 
         payable 
         isOwner(_nftAddress, listings[_nftAddress][_listingId].tokenId, msg.sender)
         notListed(_nftAddress, listings[_nftAddress][_listingId].tokenId) 
         nonReentrant 
     {
-        if(_pricePerItem <= 0) revert PriceMustBeAboveZero();
-        uint _finalPrice = getFinalPrice(_nftAddress, _listingId);
+        if(_newPrice <= 0) revert PriceMustBeAboveZero();
         Listing memory listing = listings[_nftAddress][_listingId];
         listing.sold = false;
-        listing.pricePerItem = _pricePerItem;
+        listing.pricePerItem = _newPrice;
         listing.seller = payable(msg.sender);
         listing.owner = payable(address(this));
         _listingsSold.decrement();
         
         listing.nft.transferFrom(msg.sender, address(this), listing.tokenId);
         
-        uint256 newPrice = _pricePerItem;
-        
         emit NFTListedForResell(
             // _listingId,
             _nftAddress,
             listing.tokenId,
-            payable(msg.sender),
-            payable(address(this)),
-            newPrice,
-            false
+            listing.seller,
+            listing.owner,
+            listing.pricePerItem,
+            listing.sold
         );
     }
     
     // / @notice Create the sale of a marketplace item. 
-    // / @dev Trasnfer ownership of the item, as well as funds between parties 
-    // / @params tokenId  The Id of the NFT 
+    // / @dev Trasnfer ownership of the NFT, as well as funds between parties 
+    // / @params _nftAddress NFT address
+    // / @params _listingId  The Id of the NFT 
     function createMarketSale(address _nftAddress, uint256 _listingId) 
-        external 
+        public 
         payable 
         isListed(_listingId)
         nonReentrant 
@@ -330,7 +326,6 @@ contract SaigonMarket is ReentrancyGuard {
         if(listing.sold) revert ListingSold();
         listing.owner = payable(msg.sender);
         listing.sold = true;
-        seller = payable(address(0));
         _listingsSold.increment();
         listing.nft.safeTransferFrom(address(this), msg.sender, listing.tokenId);
         
@@ -342,13 +337,21 @@ contract SaigonMarket is ReentrancyGuard {
         
         emit ListingPurchased(
             seller,
-            msg.sender,
+            listing.owner,
             listing.tokenId,
             // _listingId,
             price,
-            true
+            listing.sold
         );
     }
+    
+        
+    // / @notice Updates the listing price of the contract 
+    // / @params _pricePerItem
+    // function updatePricePerItem(uint _pricePerItem) public payable {
+    //     require(owner == msg.sender, "Only marketplace owner can update listing price.");
+    //     pricePerItem = _pricePerItem;
+    // }
     
     
     /************************/
@@ -360,8 +363,9 @@ contract SaigonMarket is ReentrancyGuard {
     /*** View Functions ***/
     /**********************/
     
-    // / @notice Returns all unsold market items 
-    // / @return all market items
+    // / @notice Returns all unsold market listings 
+    // / @params _nftAddress NFT address
+    // / @return all market listings
     function fetchMarketListings(address _nftAddress) public view returns (Listing[] memory) {
         uint listingCount = _listingIds.current();
         uint unsoldListingCount = _listingIds.current() - _listingsSold.current();
@@ -379,7 +383,8 @@ contract SaigonMarket is ReentrancyGuard {
         return nftListings;
     }
     
-    // / @notice Returns only the items that the user has purchased 
+    // / @notice Returns only the listings that the user has purchased 
+    // / @params _nftAddress NFT address
     // / @return all NFTs of the user that are not listed on the market
     function fetchMyNFTs(address _nftAddress) public view returns (Listing[] memory) {
         uint totalListingCount = _listingIds.current();
@@ -404,7 +409,8 @@ contract SaigonMarket is ReentrancyGuard {
         return nftListings;
     }
     
-    // / @notice Returns only item a user has listed 
+    // / @notice Returns only listing a user has listed 
+    // / @params _nftAddress NFT address
     // / @return all NFTs of the user that are listed on the market
     function fetchOwnedListings(address _nftAddress) public view returns (Listing[] memory) {
         uint totalListingCount = _listingIds.current();
@@ -435,11 +441,17 @@ contract SaigonMarket is ReentrancyGuard {
     /************************/
     
     // / @notice Returns the final price, which is the total of the listing price and the marketplace fee
+    // / @params _nftAddress NFT address
+    // / @params _listingId listing ID
     // / @return Total price in ether
     function getFinalPrice(address _nftAddress, uint _listingId) public view returns (uint256) {
         return ((listings[_nftAddress][_listingId].pricePerItem*(100 + feeBps))/100);
     } 
     
+    
+    // / @params _nftAddress NFT address
+    // / @params _listingId listing ID
+    // / @return Price of the listing in ether
     function getPricePerItem(address _nftAddress, uint _listingId) public view returns (uint256) {
         return listings[_nftAddress][_listingId].pricePerItem;
     }

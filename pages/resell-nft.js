@@ -32,11 +32,10 @@ export default function ResellNFT() {
         const signer = provider.getSigner()
         
         const priceFormatted = ethers.utils.parseUnits(formInput.price, 'ether')
+        let nft = new ethers.Contract(SaigonNFTAddress, SaigonNFTAbi.abi, signer)
         let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
-        let fee = await (market.getFinalPrice() - )
         
-        fee = fee.toString()
-        let transaction = await market.resellToken(id, priceFormatted, { value: listingPrice })
+        let transaction = await market.resellToken(nft.address, id, priceFormatted)
         await transaction.wait()
         
         router.push('/')
