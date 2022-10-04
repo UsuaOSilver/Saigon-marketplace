@@ -59,6 +59,15 @@ describe("SaigonMarket Unit Tests", function() {
     });
   })
   
+  describe("createToken", function () {
+    it("Should deploy the SaigonNFTFactory and mint a new token", async function () {
+      await saigonMarket.connect(addr1).createToken(URI_1);
+      expect(await saigonNFT._tokenIds()).to.equal(1);
+      expect(await saigonNFT.balanceOf(addr1.address)).to.equal(1);
+      expect(await saigonNFT.tokenURI(1)).to.equal(URI_1);
+    })
+  })
+  
   describe("createListing", function () {
     let price = toWei(1)
     beforeEach(async function () {

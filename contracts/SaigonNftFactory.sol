@@ -25,37 +25,38 @@ contract SaigonNFT is ERC721URIStorage, ERC2981 {
         
         uint256 newTokenId = _tokenIds.current();
        
-        _safeMint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, _tokenURI);
+        
+        emit Minted(_tokenURI);
+
+        _safeMint(msg.sender, newTokenId);
     
         
         // Payment transferred 
         // (bool success, ) = owner.call{value: msg.value}("");
         // require(success, "Transfer failed");
-        
-        emit Minted(_tokenURI);
-        
+                
         return newTokenId;  
     }
     
      /**
     @notice Sets the contract-wide royalty info.
      */
-    // function setRoyaltyInfo(address receiver, uint96 feeBasisPoints)
-    //     external
-    //     /*onlyOwner*/
-    // {
-    //     _setDefaultRoyalty(receiver, feeBasisPoints);
-    // }
+    function setRoyaltyInfo(address receiver, uint96 feeBasisPoints)
+        external
+        /*onlyOwner*/
+    {
+        _setDefaultRoyalty(receiver, feeBasisPoints);
+    }
 
-    // function supportsInterface(bytes4 interfaceId)
-    //     public
-    //     view
-    //     override(ERC721, ERC2981)
-    //     returns (bool)
-    // {
-    //     return super.supportsInterface(interfaceId);
-    // }
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
 }    
     
 
