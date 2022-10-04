@@ -3,9 +3,10 @@ pragma solidity 0.8.12;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract SaigonNFT is ERC721URIStorage {
+contract SaigonNFT is ERC721URIStorage, ERC2981 {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     
@@ -24,17 +25,37 @@ contract SaigonNFT is ERC721URIStorage {
         
         uint256 newTokenId = _tokenIds.current();
        
-        _safeMint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, _tokenURI);
+        
+        emit Minted(_tokenURI);
+
+        _safeMint(msg.sender, newTokenId);
     
         
         // Payment transferred 
         // (bool success, ) = owner.call{value: msg.value}("");
         // require(success, "Transfer failed");
-        
-        emit Minted(_tokenURI);
-        
+                
         return newTokenId;  
+    }
+    
+     /**
+    @notice Sets the contract-wide royalty info.
+     */
+    function setRoyaltyInfo(address receiver, uint96 feeBasisPoints)
+        external
+        /*onlyOwner*/
+    {
+        _setDefaultRoyalty(receiver, feeBasisPoints);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }    
     
