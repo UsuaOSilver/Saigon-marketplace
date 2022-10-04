@@ -820,8 +820,8 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\contracts\\SaigonMarket.sol": {
-      "lastModificationDate": 1664878422111,
-      "contentHash": "a15a4e7f786d4bf5bc33392813d93039",
+      "lastModificationDate": 1664880132595,
+      "contentHash": "b2bd9515ab7143cb43ac462edf8c97b3",
       "sourceName": "contracts/SaigonMarket.sol",
       "solcConfig": {
         "version": "0.8.12",

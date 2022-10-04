@@ -60,8 +60,10 @@ describe("SaigonMarket Unit Tests", function() {
   })
   
   describe("createToken", function () {
-    it("Should deploy the SaigonNFTFactory and mint a new token", async function () {
-      await saigonMarket.connect(addr1).createToken(URI_1);
+    it("Should deploy the SaigonNFTFactory, return the new contract address, and emit TokenCreated event", async function () {
+      await /*expect(*/saigonMarket.connect(addr1).createToken(URI_1)/*)
+        .to.emit(saigonMarket, "TokenCreated")
+        .withArgs()*/;
       expect(await saigonNFT._tokenIds()).to.equal(1);
       expect(await saigonNFT.balanceOf(addr1.address)).to.equal(1);
       expect(await saigonNFT.tokenURI(1)).to.equal(URI_1);
@@ -78,7 +80,7 @@ describe("SaigonMarket Unit Tests", function() {
     })
     it("Should track newly created listing, transfer NFT from seller to marketplace and emit NFTListed event", async function () {
       // addr1 offers their nft at a price of 1 ether
-      await expect(saigonMarket.connect(addr1).createListing(saigonNFT.address, 1, price))
+      await expect(saigonMarket.connect(addr1).createListing(1, price))
         .to.emit(saigonMarket, "NFTListed")
         .withArgs(
           // 1,

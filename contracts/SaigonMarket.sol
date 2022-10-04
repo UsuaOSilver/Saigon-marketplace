@@ -198,13 +198,16 @@ contract SaigonMarket is ReentrancyGuard {
     
     // / @notice Method for creating NFT
     // / @return address of the new SaigonNFTFactory.sol 
-    function createToken() external {
+    function createToken(string calldata _tokenURI) external returns (address) {
         
         SaigonNFT nft = new SaigonNFT();
+        nft.mint(_tokenURI);
         
         nftAddress = address(nft);
         
         emit TokenCreated(nftAddress);
+        
+        return nftAddress;
     }
     
     // / @notice Method for listing NFT
