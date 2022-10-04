@@ -70,7 +70,7 @@ export default function CreateItem() {
         let market = new ethers.Contract(SaigonMarketAddress, SaigonMarketAbi.abi, signer)
         // mint nft
         console.log("Minting NFT...")
-        let mintTx = await nft.mint(url)
+        let mintTx = await market.createToken(url)
         console.log(mintTx)
         const mintTxReceipt = await mintTx.wait()
         console.log(mintTxReceipt)
