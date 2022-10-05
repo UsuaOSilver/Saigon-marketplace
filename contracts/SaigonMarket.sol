@@ -172,7 +172,7 @@ contract SaigonMarket is ReentrancyGuard {
     // bytes4 private constant INTERFACE_ID_ERC1155 = 0xd9b67a26;
     
     address payable public immutable operator; // the account that receives fees
-    uint public immutable feeBps; // the fee % on sales 
+    uint8 public immutable feeBps; // the fee % on sales 
     
     address nftAddress;
 
@@ -186,7 +186,7 @@ contract SaigonMarket is ReentrancyGuard {
     // mapping(address => bool) public exists; // compare INTERFACE_ID instead
     
     
-    constructor (uint _feeBps) {
+    constructor (uint8 _feeBps) {
         operator = payable(msg.sender);
         feeBps = _feeBps;
     }
