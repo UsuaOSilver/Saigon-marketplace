@@ -171,6 +171,8 @@ contract SaigonMarket is ReentrancyGuard {
     bytes4 private constant INTERFACE_ID_ERC721 = 0x80ac58cd;
     // bytes4 private constant INTERFACE_ID_ERC1155 = 0xd9b67a26;
     
+    SaigonNFTFactory saigonNFTFactory;
+    
     address payable public immutable operator; // the account that receives fees
     uint8 public immutable feeBps; // the fee % on sales 
     
@@ -186,9 +188,10 @@ contract SaigonMarket is ReentrancyGuard {
     // mapping(address => bool) public exists; // compare INTERFACE_ID instead
     
     
-    constructor (uint8 _feeBps) {
+    constructor (uint8 _feeBps, SaigonNFTFactory _saigonNFTFactory) {
         operator = payable(msg.sender);
         feeBps = _feeBps;
+        saigonNFTFactory = _saigonNFTFactory;
     }
     
     
@@ -200,7 +203,8 @@ contract SaigonMarket is ReentrancyGuard {
     // / @return address of the new SaigonNFTFactory.sol 
     function createToken(string calldata _tokenURI) external returns (address) {
         
-        SaigonNFT nft = new SaigonNFT();
+        SaigonNFT nft = saigonNFTFactory.createNFT();
+        
         nft.mint(_tokenURI);
         
         nftAddress = address(nft);
@@ -219,7 +223,7 @@ contract SaigonMarket is ReentrancyGuard {
         uint256 _tokenId,
         uint256 _listingId,
         uint256 _pricePerItem
-     ) public {
+     ) internal {
         
         if (IERC165(nftAddress).supportsInterface(INTERFACE_ID_ERC721)) {
             IERC721 _nft = IERC721(nftAddress);

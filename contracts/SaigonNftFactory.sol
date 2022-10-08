@@ -15,7 +15,7 @@ contract SaigonNFT is ERC721URIStorage, ERC2981 {
     Counters.Counter public _tokenIds;
     
     constructor() ERC721("SaiGon Districts", "SGN") {}
-    
+        
     // / @notice                          Mints the amount of tokens requested by the buyer
     // / @param      tokenIds             The number of NFT already minted in the collection
     // / @return     newTokenId           the total number of NFT minted afterwards to be displayed on UI
@@ -58,5 +58,10 @@ contract SaigonNFT is ERC721URIStorage, ERC2981 {
         return super.supportsInterface(interfaceId);
     }
 }    
-    
+
+contract SaigonNFTFactory {
+    function createNFT() external returns (SaigonNFT) {
+        return new SaigonNFT();
+    }
+}
 

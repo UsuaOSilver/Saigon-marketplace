@@ -252,8 +252,8 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\contracts\\SaigonNftFactory.sol": {
-      "lastModificationDate": 1664874785796,
-      "contentHash": "25ba5dafce3c04502e2534b590ba619a",
+      "lastModificationDate": 1665266870140,
+      "contentHash": "d9cb768ffd3730aadcf031f40145c78b",
       "sourceName": "contracts/SaigonNftFactory.sol",
       "solcConfig": {
         "version": "0.8.12",
@@ -289,7 +289,8 @@
         "0.8.12"
       ],
       "artifacts": [
-        "SaigonNFT"
+        "SaigonNFT",
+        "SaigonNFTFactory"
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
@@ -820,8 +821,8 @@
       ]
     },
     "C:\\Users\\napee\\PROJECTS\\Summer22_Crystalize\\capstone-project\\saigon-marketplace\\contracts\\SaigonMarket.sol": {
-      "lastModificationDate": 1665012303479,
-      "contentHash": "b5b2722a449b6f8d2d5c73b0c66523ef",
+      "lastModificationDate": 1665266916598,
+      "contentHash": "acc8bbca4695fb8cc570182b14e1a4fc",
       "sourceName": "contracts/SaigonMarket.sol",
       "solcConfig": {
         "version": "0.8.12",
