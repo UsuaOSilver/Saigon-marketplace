@@ -19,7 +19,6 @@ COMING SOON...
 🧪 Tested with:
 - Slither
 - Echidna
-- [sec3.dev](https://www.sec3.dev/) X-ray Auditor
 
 ### 🗺️ Design Documentation
 [CSG_DesignDoc](https://github.com/UsuaOSilver/Saigon-marketplace/blob/main/designDoc.md)
