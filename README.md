@@ -20,5 +20,10 @@ COMING SOON...
 - Slither
 - Echidna
 
+
+🏗️ Further Development:
+- Implement GSN (gasless tx).
+- OpenSea API
+
 ### 🗺️ Design Documentation
 [CSG_DesignDoc](https://github.com/UsuaOSilver/Saigon-marketplace/blob/main/designDoc.md)
